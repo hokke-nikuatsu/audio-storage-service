@@ -80,8 +80,7 @@
 ## Section Authoring Guidance
 
 ### Global Ordering
-- Default flow: Overview → Goals/Non-Goals → Boundary Commitments → Architecture → File Structure Plan → Components & Interfaces → Optional sections.
-- Teams may swap Traceability earlier or place Data Models nearer Architecture when it improves clarity, but keep section headings intact.
+- Follow the sections, their order and the line limit of `.kiro/settings/templates/specs/design.md`. Sections before the separator are for human review; Components and Interfaces and File Structure Plan come last as implementation references. <!-- project-override (see docs/adr/0002) -->
 - Within each section, follow **Summary → Scope → Decisions → Impacts/Risks** so reviewers can scan consistently.
 
 ### Requirement IDs
@@ -91,9 +90,7 @@
 - Every component, task, and traceability row must reference the same canonical numeric ID.
 
 ### Technology Stack
-- Include ONLY layers impacted by this feature (frontend, backend, data, messaging, infra).
-- For each layer specify tool/library + version + the role it plays; push extended rationale, comparisons, or benchmarks to `research.md`.
-- When extending an existing system, highlight deviations from the current stack and list new dependencies.
+- Do not write a Technology Stack section. Technology choices live in steering and `docs/adr/`; reference them by ADR number (`ADR-NNNN`). <!-- project-override (see docs/adr/0002) -->
 
 ### System Flows
 - Add diagrams only when they clarify behavior:  
@@ -103,39 +100,34 @@
 - Always use pure Mermaid. If no complex flow exists, omit the entire section.
 
 ### Requirements Traceability
-- Use the standard table (`Requirement | Summary | Components | Interfaces | Flows`) to prove coverage.
-- Collapse to bullet form only when a single requirement maps 1:1 to a component.
-- Prefer the component summary table for simple mappings; reserve the full traceability table for complex or compliance-sensitive requirements.
+- Always use the table in the template (`Requirement | Summary | Components | Tests`) to prove coverage. It is the only place that maps requirements to tests. <!-- project-override (see docs/adr/0002) -->
 - Re-run this mapping whenever requirements or components change to avoid drift.
 
 ### Components & Interfaces Authoring
 - Boundary Commitments should already make the ownership seam explicit before this section begins.
 - Group components by domain/layer and provide one block per component.
-- Begin with a summary table listing Component, Domain, Intent, Requirement coverage, key dependencies, and selected contracts.
-- Table fields: Intent (one line), Requirements (`2.1, 2.3`), Owner/Reviewers (optional).
+- Begin with the summary table in the template (`Component | Layer | Intent | Requirements | Dependencies`). Intent is one line; Requirements are numeric IDs (`2.1, 2.3`). <!-- project-override (see docs/adr/0002) -->
 - Dependencies table must mark each entry as Inbound/Outbound/External and assign Criticality (`P0` blocking, `P1` high-risk, `P2` informational).
 - Summaries of external dependency research stay here; detailed investigation (API signatures, rate limits, migration notes) belongs in `research.md`.
 - design.md must remain a self-contained reviewer artifact. Reference `research.md` only for background, and restate any conclusions or decisions here.
 - Contracts: tick only the relevant types (Service/API/Event/Batch/State). Unchecked types should not appear later in the component section.
 - Service interfaces must declare method signatures, inputs/outputs, and error envelopes. API/Event/Batch contracts require schema tables or bullet lists covering trigger, payload, delivery, idempotency.
-- Use **Integration & Migration Notes**, **Validation Hooks**, and **Open Questions / Risks** to document rollout strategy, observability, and unresolved decisions.
-- Detail density rules:
-  - **Full block**: components introducing new boundaries (logic hooks, shared services, external integrations, data layers).
-  - **Summary-only**: presentational/UI components with no new boundaries (plus a short Implementation Note if needed).
+- Detail density rules: <!-- project-override (see docs/adr/0002) -->
+  - **Full block**: only components that introduce a boundary (ports, adapters, persistence, external processes). Show interface signatures in the project's language, never implementation code.
+  - **Summary-only**: every other component gets a single row in the summary table and no block.
 - Implementation Notes must combine Integration / Validation / Risks into a single bulleted subsection to reduce repetition.
 - Prefer lists or inline descriptors for short data (dependencies, contract selections). Use tables only when comparing multiple items.
 
 ### Shared Interfaces & Props
 - Define a base interface (e.g., `BaseUIPanelProps`) for recurring UI components and extend it per component to capture only the deltas.
-- Hooks, utilities, and integration adapters that introduce new contracts should still include full TypeScript signatures.
+- Hooks, utilities, and integration adapters that introduce new contracts should still include full signatures in the project's language. <!-- project-override (see docs/adr/0002) -->
 - When reusing a base contract, reference it explicitly (e.g., “Extends `BaseUIPanelProps` with `onSubmitAnswer` callback”) instead of duplicating the code block.
 
 ### Data Models
 - Domain Model covers aggregates, entities, value objects, domain events, and invariants. Add Mermaid diagrams only when relationships are non-trivial.
 - Logical Data Model should articulate structure, indexing, sharding, and storage-specific considerations (event store, KV/wide-column) relevant to the change.
 - Data Contracts & Integration section documents API payloads, event schemas, and cross-service synchronization patterns when the feature crosses boundaries.
-- Lengthy type definitions or vendor-specific option objects should be placed in the Supporting References section within design.md, linked from the relevant section. Investigation notes stay in `research.md`.
-- Supporting References usage is optional; only create it when keeping the content in the main body would reduce readability. All decisions must still appear in the main sections so design.md stands alone.
+- Do not create a Supporting References section. Keep type definitions short and leave vendor-specific option objects to the implementation. Investigation notes stay in `research.md`. <!-- project-override (see docs/adr/0002) -->
 
 ### Error/Testing/Security/Performance Sections
 - Record only feature-specific decisions or deviations. Link or reference organization-wide standards (steering) for baseline practices instead of restating them.
@@ -196,13 +188,3 @@ graph TB
 ❌ Tight coupling between components
 ❌ Missing data consistency strategy
 ❌ Incomplete dependency analysis
-
-<!-- project-override: start (see docs/adr/0002) -->
-## Project Overrides
-
-These rules take precedence over the sections above when they conflict.
-
-- **The template wins**: `.kiro/settings/templates/specs/design.md` defines the sections, their order, the line limit and what not to restate. Follow it over "Global Ordering" and any other guidance above.
-- **No Technology Stack section**: Do not write one, despite "Technology Stack" above. Reference technology choices by ADR number (`ADR-NNNN`).
-- **Detail density**: Full component blocks only for components that introduce a boundary (ports, adapters, persistence, external processes). Everything else is a single summary row. Show interface signatures in the project's language, never implementation code.
-<!-- project-override: end -->
