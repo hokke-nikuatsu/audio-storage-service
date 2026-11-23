@@ -1,332 +1,81 @@
 # Design Document Template
 
 ---
-**Purpose**: Provide sufficient detail to ensure implementation consistency across different implementers, preventing interpretation drift.
+**Purpose**: A design that a human reviewer can read top to bottom in one sitting, and that an implementer can follow without interpretation drift.
 
-**Approach**:
-- Include essential sections that directly inform implementation decisions
-- Omit optional sections unless critical to preventing implementation errors
-- Match detail level to feature complexity
-- Use diagrams and tables over lengthy prose
-
-**Warning**: Approaching 1000 lines indicates excessive feature complexity that may require design simplification or splitting into multiple specs.
+**Rules**:
+- Target 200 lines or fewer for the whole document. MUST NOT exceed 250 lines; if it would, simplify the design or split the spec.
+- Do not restate steering or ADRs. Technology choices live in `.kiro/steering/tech.md` and `docs/adr/`; reference them as `ADR-NNNN`.
+- Keep the heading names below unchanged; write the body in the language set in `spec.json`.
+- Prefer tables and Mermaid diagrams over prose. Omit an optional section entirely instead of writing "N/A".
 
 ---
 
-> Sections may be reordered (e.g., surfacing Requirements Traceability earlier or moving Data Models nearer Architecture) when it improves clarity. Within each section, keep the flow **Summary → Scope → Decisions → Impacts/Risks** so reviewers can scan consistently.
-
-## Overview 
-2-3 paragraphs max
-**Purpose**: This feature delivers [specific value] to [target users].
-**Users**: [Target user groups] will utilize this for [specific workflows].
-**Impact** (if applicable): Changes the current [system state] by [specific modifications].
-
+## Overview
+<!-- 2-3 sentences: what this delivers and to whom. -->
 
 ### Goals
-- Primary objective 1
-- Primary objective 2  
-- Success criteria
+<!-- Bullet list: outcomes this spec must achieve. -->
 
 ### Non-Goals
-- Explicitly excluded functionality
-- Future considerations outside current scope
-- Integration points deferred
+<!-- Bullet list: what this spec explicitly does not do. -->
 
 ## Boundary Commitments
 
-State the responsibility boundary of this spec in concrete terms. Treat this as the anchor for architecture, tasks, and later validation.
-
 ### This Spec Owns
-- Capabilities and behaviors this spec is responsible for
-- Data it owns or is authoritative for
-- Interfaces or contracts it defines or stabilizes
+<!-- Bullet list: capabilities, data and interfaces this spec is responsible for. -->
 
 ### Out of Boundary
-- Related concerns this spec explicitly does NOT own
-- Work deferred to another spec, existing subsystem, or later phase
-- Changes this spec must not absorb as "just one more thing"
+<!-- Bullet list: related concerns this spec does not own, and where they belong. -->
 
 ### Allowed Dependencies
-- Upstream systems/specs/components this design may depend on
-- Shared infrastructure this design may use
-- Dependency constraints that must not be violated
+<!-- Bullet list: components and infrastructure this spec may depend on. -->
 
 ### Revalidation Triggers
-List the kinds of changes that should force dependent specs or consumers to re-check integration.
-
-- Contract shape changes
-- Data ownership changes
-- Dependency direction changes
-- Startup/runtime prerequisite changes
+<!-- Bullet list: changes that force consumers of this spec to re-check integration. -->
 
 ## Architecture
 
-> Reference detailed discovery notes in `research.md` only for background; keep design.md self-contained for reviewers by capturing all decisions and contracts here.
-> Capture key decisions in text and let diagrams carry structural detail—avoid repeating the same information in prose.
-> Supporting sections below should remain as light as possible unless they materially clarify the responsibility boundary, dependency rules, or integration seams.
-
-### Existing Architecture Analysis (if applicable)
-When modifying existing systems:
-- Current architecture patterns and constraints
-- Existing domain boundaries to be respected
-- Integration points that must be maintained
-- Technical debt addressed or worked around
-
 ### Architecture Pattern & Boundary Map
-**RECOMMENDED**: Include Mermaid diagram showing the chosen architecture pattern and system boundaries (required for complex features, optional for simple additions)
+<!-- One Mermaid diagram of components and dependency direction. Then state the dependency direction in one line (e.g. Web → Application → Domain ← Infrastructure) and the pattern with its ADR number. No technology stack table. -->
 
-**Architecture Integration**:
-- Selected pattern: [name and brief rationale]
-- Domain/feature boundaries: [how responsibilities are separated to avoid conflicts]
-- Existing patterns preserved: [list key patterns]
-- New components rationale: [why each is needed]
-- Steering compliance: [principles maintained]
+## Data Models
+<!-- Tables, columns, types, keys and constraints in one table per entity. Add a Mermaid ER diagram only if relationships are non-trivial. -->
 
-### Technology Stack
+## API Contract
+<!-- One table: Method | Path | Request | Success response | Error responses. Detail only what the table cannot carry (e.g. content types, size limits). -->
 
-| Layer | Choice / Version | Role in Feature | Notes |
-|-------|------------------|-----------------|-------|
-| Frontend / CLI | | | |
-| Backend / Services | | | |
-| Data / Storage | | | |
-| Messaging / Events | | | |
-| Infrastructure / Runtime | | | |
-
-> Keep rationale concise here and, when more depth is required (trade-offs, benchmarks), add a short summary plus pointer to the Supporting References section and `research.md` for raw investigation notes.
-
-## File Structure Plan
-
-Map the directory structure and file responsibilities for this feature. This section directly drives task `_Boundary:_` annotations and implementation Task Briefs. Use the appropriate level of detail:
-
-- **Small features**: List individual files with responsibilities
-- **Large features**: Describe directory-level structure + per-domain/module pattern, list only non-obvious files individually
-
-### Directory Structure
-```
-src/
-├── domain-a/              # Domain A responsibility
-│   ├── controller.ts      # Endpoint handlers
-│   ├── service.ts         # Business logic
-│   └── types.ts           # Domain types
-├── domain-b/              # Domain B (same pattern as domain-a)
-└── shared/
-    └── cross-cutting.ts   # Non-obvious: why this exists
-```
-
-> For repeated structures, describe the pattern once (e.g., "domain-b follows same pattern as domain-a"). List individual files only when their responsibility isn't obvious from the path.
-
-### Modified Files
-- `path/to/existing.ts` — What changes and why
-
-> Each file should have one clear responsibility. Group files that change together. For repeated structures, describe the pattern once rather than listing every file.
-> Avoid duplicating what Components and Interfaces already describes — focus on the physical file layout that Components maps to.
+| Method | Path | Request | Success | Errors |
+|--------|------|---------|---------|--------|
 
 ## System Flows
+<!-- Optional. Sequence diagrams only for flows with branching, external processes or partial-failure handling. State the decisions (ordering, cleanup on failure) in bullets after the diagram. -->
 
-Provide only the diagrams needed to explain non-trivial flows. Use pure Mermaid syntax. Common patterns:
-- Sequence (multi-party interactions)
-- Process / state (branching logic or lifecycle)
-- Data / event flow (pipelines, async messaging)
+## Error Handling
+<!-- One table mapping each failure condition to its response and to the requirement it satisfies. -->
 
-Skip this section entirely for simple CRUD changes.
-> Describe flow-level decisions (e.g., gating conditions, retries) briefly after the diagram instead of restating each step.
+| Condition | Response | Requirements |
+|-----------|----------|--------------|
 
 ## Requirements Traceability
 
-Use this section for complex or compliance-sensitive features where requirements span multiple domains. Straightforward 1:1 mappings can rely on the Components summary table.
-
-Map each requirement ID (e.g., `2.1`) to the design elements that realize it.
-
-| Requirement | Summary | Components | Interfaces | Flows |
-|-------------|---------|------------|------------|-------|
-| 1.1 | | | | |
-| 1.2 | | | | |
-
-> Omit this section only when a single component satisfies a single requirement without cross-cutting concerns.
-
-## Components and Interfaces
-
-Provide a quick reference before diving into per-component details.
-
-- Summaries can be a table or compact list. Example table:
-  | Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |
-  |-----------|--------------|--------|--------------|--------------------------|-----------|
-  | ExampleComponent | UI | Displays XYZ | 1, 2 | GameProvider (P0), MapPanel (P1) | Service, State |
-- Only components introducing new boundaries (e.g., logic hooks, external integrations, persistence) require full detail blocks. Simple presentation components can rely on the summary row plus a short Implementation Note.
-
-Group detailed blocks by domain or architectural layer. For each detailed component, list requirement IDs as `2.1, 2.3` (omit “Requirement”). When multiple UI components share the same contract, reference a base interface/props definition instead of duplicating code blocks.
-
-### [Domain / Layer]
-
-#### [Component Name]
-
-| Field | Detail |
-|-------|--------|
-| Intent | 1-line description of the responsibility |
-| Requirements | 2.1, 2.3 |
-| Owner / Reviewers | (optional) |
-
-**Responsibilities & Constraints**
-- Primary responsibility
-- Domain boundary and transaction scope
-- Data ownership / invariants
-
-**Dependencies**
-- Inbound: Component/service name — purpose (Criticality)
-- Outbound: Component/service name — purpose (Criticality)
-- External: Service/library — purpose (Criticality)
-
-Summarize external dependency findings here; deeper investigation (API signatures, rate limits, migration notes) lives in `research.md`.
-
-**Contracts**: Service [ ] / API [ ] / Event [ ] / Batch [ ] / State [ ]  ← check only the ones that apply.
-
-##### Service Interface
-```typescript
-interface [ComponentName]Service {
-  methodName(input: InputType): Result<OutputType, ErrorType>;
-}
-```
-- Preconditions:
-- Postconditions:
-- Invariants:
-
-##### API Contract
-| Method | Endpoint | Request | Response | Errors |
-|--------|----------|---------|----------|--------|
-| POST | /api/resource | CreateRequest | Resource | 400, 409, 500 |
-
-##### Event Contract
-- Published events:  
-- Subscribed events:  
-- Ordering / delivery guarantees:
-
-##### Batch / Job Contract
-- Trigger:  
-- Input / validation:  
-- Output / destination:  
-- Idempotency & recovery:
-
-##### State Management
-- State model:  
-- Persistence & consistency:  
-- Concurrency strategy:
-
-**Implementation Notes**
-- Integration: 
-- Validation: 
-- Risks:
-
-## Data Models
-
-Focus on the portions of the data landscape that change with this feature.
-
-### Domain Model
-- Aggregates and transactional boundaries
-- Entities, value objects, domain events
-- Business rules & invariants
-- Optional Mermaid diagram for complex relationships
-
-### Logical Data Model
-
-**Structure Definition**:
-- Entity relationships and cardinality
-- Attributes and their types
-- Natural keys and identifiers
-- Referential integrity rules
-
-**Consistency & Integrity**:
-- Transaction boundaries
-- Cascading rules
-- Temporal aspects (versioning, audit)
-
-### Physical Data Model
-**When to include**: When implementation requires specific storage design decisions
-
-**For Relational Databases**:
-- Table definitions with data types
-- Primary/foreign keys and constraints
-- Indexes and performance optimizations
-- Partitioning strategy for scale
-
-**For Document Stores**:
-- Collection structures
-- Embedding vs referencing decisions
-- Sharding key design
-- Index definitions
-
-**For Event Stores**:
-- Event schema definitions
-- Stream aggregation strategies
-- Snapshot policies
-- Projection definitions
-
-**For Key-Value/Wide-Column Stores**:
-- Key design patterns
-- Column families or value structures
-- TTL and compaction strategies
-
-### Data Contracts & Integration
-
-**API Data Transfer**
-- Request/response schemas
-- Validation rules
-- Serialization format (JSON, Protobuf, etc.)
-
-**Event Schemas**
-- Published event structures
-- Schema versioning strategy
-- Backward/forward compatibility rules
-
-**Cross-Service Data Management**
-- Distributed transaction patterns (Saga, 2PC)
-- Data synchronization strategies
-- Eventual consistency handling
-
-Skip subsections that are not relevant to this feature.
-
-## Error Handling
-
-### Error Strategy
-Concrete error handling patterns and recovery mechanisms for each error type.
-
-### Error Categories and Responses
-**User Errors** (4xx): Invalid input → field-level validation; Unauthorized → auth guidance; Not found → navigation help
-**System Errors** (5xx): Infrastructure failures → graceful degradation; Timeouts → circuit breakers; Exhaustion → rate limiting  
-**Business Logic Errors** (422): Rule violations → condition explanations; State conflicts → transition guidance
-
-**Process Flow Visualization** (when complex business logic exists):
-Include Mermaid flowchart only for complex error scenarios with business workflows.
-
-### Monitoring
-Error tracking, logging, and health monitoring implementation.
+| Requirement | Summary | Components | Tests |
+|-------------|---------|------------|-------|
 
 ## Testing Strategy
+<!-- Split into unit and integration. For each item, name what is verified and why; derive items from acceptance criteria, not generic patterns. The mapping to requirements lives in Requirements Traceability. -->
 
-### Default sections (adapt names/sections to fit the domain)
-- Unit Tests: 3–5 items from core functions/modules (e.g., auth methods, subscription logic)
-- Integration Tests: 3–5 cross-component flows (e.g., webhook handling, notifications)
-- E2E/UI Tests (if applicable): 3–5 critical user paths (e.g., forms, dashboards)
-- Performance/Load (if applicable): 3–4 items (e.g., concurrency, high-volume ops)
+## Related ADRs
+<!-- Bullet list: ADR-NNNN — one-line reason it matters to this design. -->
 
-## Optional Sections (include when relevant)
+---
+<!-- Implementation references below. Reviewers may skim. -->
 
-### Security Considerations
-_Use this section for features handling auth, sensitive data, external integrations, or user permissions. Capture only decisions unique to this feature; defer baseline controls to steering docs._
-- Threat modeling, security controls, compliance requirements
-- Authentication and authorization patterns
-- Data protection and privacy considerations
+## Components and Interfaces
+<!-- Summary table first. Full blocks only for components that introduce a boundary (ports, adapters, persistence, external processes): responsibility, dependencies (Inbound/Outbound/External with P0-P2), and the interface signature. No implementation code. -->
 
-### Performance & Scalability
-_Use this section when performance targets, high load, or scaling concerns exist. Record only feature-specific targets or trade-offs and rely on steering documents for general practices._
-- Target metrics and measurement strategies
-- Scaling approaches (horizontal/vertical)
-- Caching strategies and optimization techniques
+| Component | Layer | Intent | Requirements | Dependencies |
+|-----------|-------|--------|--------------|--------------|
 
-### Migration Strategy
-Include a Mermaid flowchart showing migration phases when schema/data movement is required.
-- Phase breakdown, rollback triggers, validation checkpoints
-
-## Supporting References (Optional)
-- Create this section only when keeping the information in the main body would hurt readability (e.g., very long TypeScript definitions, vendor option matrices, exhaustive schema tables). Keep decision-making context in the main sections so the design stays self-contained.
-- Link to the supporting references from the main text instead of inlining large snippets.
-- Background research notes and comparisons continue to live in `research.md`, but their conclusions must be summarized in the main design.
+## File Structure Plan
+<!-- Concrete paths with one responsibility each. Every component above must appear here. Describe repeated patterns once. Use a code block for the directory tree. -->

@@ -8,3 +8,4 @@
 | 番号 | タイトル | 状態 | 日付 |
 |---|---|---|---|
 | [0001](0001-spec-driven-ai-development-with-human-judgment.md) | cc-sdd による仕様駆動で、AI が実装・レビューし、人が判断する開発プロセスにする | accepted | 2026-11-23 |
+| [0002](0002-tune-cc-sdd-for-human-readable-specs.md) | cc-sdd はテンプレートを主にチューニングし、design.md を人が読める長さと構成に保つ | accepted | 2026-11-23 |
