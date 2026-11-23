@@ -2,11 +2,15 @@
 
 技術的な判断の理由を残す。1つの判断につき1ファイルで、[MADR](https://adr.github.io/madr/) 4.0.0 の minimal 版に、不可逆度・見直し条件・反映先を加えた[テンプレート](template.md)で書く。
 
-- ADR は判断した時点の記録で、書き換えない。判断を変えるときは新しい ADR を作り、古い ADR の status を `superseded by ADR-NNNN` にする
+- ADR は判断した時点の記録で、書き換えない。判断を変えるときは新しい ADR を作り、古い ADR の status だけを変える
+  - 判断を丸ごと変えるとき: 古い ADR を `superseded by ADR-NNNN` にする
+  - 判断の一部だけを変えるとき: 古い ADR を `amended by ADR-NNNN` にし、新しい ADR の front matter の `amends` に古い ADR を書く。古い ADR のほかの決定は有効なまま
+- 1つの ADR には1つの判断だけを書く
 - 現時点の正は、作業の進め方の規約（`docs/conventions/`）、コードに関する規約（steering）、仕様（spec）に置く。ADR はその理由だけを持つ
 
 | 番号 | タイトル | 状態 | 日付 |
 |---|---|---|---|
-| [0001](0001-spec-driven-ai-development-with-human-judgment.md) | cc-sdd による仕様駆動で、AI が実装・レビューし、人が判断する開発プロセスにする | accepted | 2026-11-23 |
-| [0002](0002-tune-cc-sdd-for-human-readable-specs.md) | cc-sdd はテンプレートを主にチューニングし、design.md を人が読める長さと構成に保つ | accepted | 2026-11-23 |
+| [0001](0001-spec-driven-ai-development-with-human-judgment.md) | cc-sdd による仕様駆動で、AI が実装・レビューし、人が判断する開発プロセスにする | amended by ADR-0004 | 2026-11-23 |
+| [0002](0002-tune-cc-sdd-for-human-readable-specs.md) | cc-sdd はテンプレートを主にチューニングし、design.md を人が読める長さと構成に保つ | amended by ADR-0004 | 2026-11-23 |
 | [0003](0003-separate-entry-points-from-conventions.md) | 入口のファイルは案内だけにし、規約は作業の進め方とコードで置き場を分ける | accepted | 2026-11-23 |
+| [0004](0004-human-approves-requirements-design-and-tasks.md) | cc-sdd の spec は、要件・設計・タスクの3つを人が承認する | accepted | 2026-11-23 |

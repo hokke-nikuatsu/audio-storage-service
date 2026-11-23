@@ -14,6 +14,7 @@ allowed-tools: Read, Write, Edit, Glob, Bash(ls:*), Bash(date:*)
 
 - **人が決めたことだけを書く。** 会話の中に人の決定がなければ、ADR を書かずに「何が未決か」を返して止まる。AI が選択肢を選んで決定として書いてはいけない
 - 検討した選択肢と理由は、会話で挙がったものを使う。会話にない選択肢や理由を足すときは、足したことを人に伝える
+- 1つの ADR には1つの判断だけを書く。決定に別々に変わりうる判断が複数入りそうなら、ADR を分けるよう人に提案する
 - ADR は判断の理由だけを持つ。現時点の構成や規約の説明は規約（`docs/conventions/`）・steering・spec に書き、ADR には書かない
 
 ## 手順
@@ -27,8 +28,10 @@ allowed-tools: Read, Write, Edit, Glob, Bash(ls:*), Bash(date:*)
    - `## 影響` の「本番運用なら」には、今回の実装の範囲を超えて本番ではどうするかを書く。該当しなければ行ごと消す
    - `## 見直し条件` は「規模が大きくなったら」のような曖昧な書き方をせず、観測できる条件で書く
    - 60行以内を目安にする
-5. 判断を変える ADR の場合は、古い ADR の front matter の `status` を `superseded by ADR-NNNN` に変える。古い ADR の本文は書き換えない
-6. `docs/adr/README.md` の表に1行足す。置き換えた ADR があれば、その行の状態も更新する
+5. 既存の ADR の判断を変える場合は、古い ADR の front matter の `status` だけを変える。古い ADR の本文は書き換えない
+   - 判断を丸ごと変える: `superseded by ADR-NNNN`
+   - 判断の一部だけを変える: `amended by ADR-NNNN`。新しい ADR の front matter に `amends: ADR-NNNN` を書き、決定に「どの判断を変え、ほかは有効なまま」かを書く
+6. `docs/adr/README.md` の表に1行足す。置き換えた・一部を変えた ADR があれば、その行の状態も更新する
 7. 書いた ADR を人に見せ、`## 反映先` に挙げた規約・steering・spec への反映がまだなら、どこに何を書くかを提案する
 
 ## してはいけないこと
