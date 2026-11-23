@@ -4,9 +4,9 @@
 
 ## ドキュメント
 
-| 知りたいこと | 場所 |
-|---|---|
-| 作業の進め方の規約 | [docs/conventions/workflow.md](docs/conventions/workflow.md) |
-| 技術的な判断とその理由 | [docs/adr/](docs/adr/README.md) |
-| AI エージェント向けの入口 | [AGENTS.md](AGENTS.md) |
-| 作業時間の記録 | [docs/worklog.md](docs/worklog.md) |
+それぞれの役割は、[ドキュメントの置き場](docs/conventions/workflow.md#ドキュメントの置き場)にある。
+
+- [作業の進め方の規約](docs/conventions/workflow.md)
+- [ADR](docs/adr/README.md)
+- [AGENTS.md](AGENTS.md)
+- [作業ログ](docs/worklog.md)

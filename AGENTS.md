@@ -11,9 +11,11 @@
 
 ## 作業の前に読むもの
 
-| ドキュメント | 説明 |
+それぞれのドキュメントに何が書いてあるかは、[docs/conventions/workflow.md](docs/conventions/workflow.md) の「ドキュメントの置き場」にある。
+
+| ドキュメント | 読むタイミング |
 |---|---|
-| [docs/conventions/workflow.md](docs/conventions/workflow.md) | 作業の進め方の規約（ドキュメントの置き場、開発の流れ、要件 ID、ブランチ）。すべての作業の前に読む |
-| `.kiro/steering/` | コードに関する規約（技術スタック、アーキテクチャ、コーディング規約）。コードを読み書きする作業の前に読む |
-| `.kiro/specs/<feature>/` | 機能ごとの仕様（要件、設計、タスク） |
-| [docs/adr/](docs/adr/README.md) | 判断の理由 |
+| [docs/conventions/workflow.md](docs/conventions/workflow.md) | すべての作業の前 |
+| `.kiro/steering/` | コードを読み書きする作業の前 |
+| `.kiro/specs/<feature>/` | その機能の spec や実装の作業の前 |
+| [docs/adr/](docs/adr/README.md) | 判断の理由を確かめるとき |
