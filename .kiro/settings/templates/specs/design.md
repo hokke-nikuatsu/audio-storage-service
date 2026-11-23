@@ -35,6 +35,8 @@
 <!-- Bullet list: changes that force consumers of this spec to re-check integration. -->
 
 ## Architecture
+
+### Architecture Pattern & Boundary Map
 <!-- One Mermaid diagram of components and dependency direction. Then state the dependency direction in one line (e.g. Web → Application → Domain ← Infrastructure) and the pattern with its ADR number. No technology stack table. -->
 
 ## Data Models
