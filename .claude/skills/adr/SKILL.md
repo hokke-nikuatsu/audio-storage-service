@@ -14,7 +14,7 @@ allowed-tools: Read, Write, Edit, Glob, Bash(ls:*), Bash(date:*)
 
 - **人が決めたことだけを書く。** 会話の中に人の決定がなければ、ADR を書かずに「何が未決か」を返して止まる。AI が選択肢を選んで決定として書いてはいけない
 - 検討した選択肢と理由は、会話で挙がったものを使う。会話にない選択肢や理由を足すときは、足したことを人に伝える
-- ADR は判断の理由だけを持つ。現時点の構成や規約の説明は steering と spec に書き、ADR には書かない
+- ADR は判断の理由だけを持つ。現時点の構成や規約の説明は規約（`docs/conventions/`）・steering・spec に書き、ADR には書かない
 
 ## 手順
 
@@ -29,7 +29,7 @@ allowed-tools: Read, Write, Edit, Glob, Bash(ls:*), Bash(date:*)
    - 60行以内を目安にする
 5. 判断を変える ADR の場合は、古い ADR の front matter の `status` を `superseded by ADR-NNNN` に変える。古い ADR の本文は書き換えない
 6. `docs/adr/README.md` の表に1行足す。置き換えた ADR があれば、その行の状態も更新する
-7. 書いた ADR を人に見せ、`## 反映先` に挙げた steering・spec への反映がまだなら、どこに何を書くかを提案する
+7. 書いた ADR を人に見せ、`## 反映先` に挙げた規約・steering・spec への反映がまだなら、どこに何を書くかを提案する
 
 ## してはいけないこと
 
