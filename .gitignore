@@ -1,0 +1,5 @@
+# 選考用の課題資料はリポジトリで管理しない
+/requirements/
+
+# OS
+.DS_Store
