@@ -16,30 +16,27 @@
 <!-- 2-3 sentences: what this delivers and to whom. -->
 
 ### Goals
-- 
+<!-- Bullet list: outcomes this spec must achieve. -->
 
 ### Non-Goals
-- 
+<!-- Bullet list: what this spec explicitly does not do. -->
 
 ## Boundary Commitments
 
 ### This Spec Owns
-- 
+<!-- Bullet list: capabilities, data and interfaces this spec is responsible for. -->
 
 ### Out of Boundary
-- 
+<!-- Bullet list: related concerns this spec does not own, and where they belong. -->
 
 ### Allowed Dependencies
-- 
+<!-- Bullet list: components and infrastructure this spec may depend on. -->
 
 ### Revalidation Triggers
-- 
+<!-- Bullet list: changes that force consumers of this spec to re-check integration. -->
 
 ## Architecture
 <!-- One Mermaid diagram of components and dependency direction. Then state the dependency direction in one line (e.g. Web → Application → Domain ← Infrastructure) and the pattern with its ADR number. No technology stack table. -->
-
-```mermaid
-```
 
 ## Data Models
 <!-- Tables, columns, types, keys and constraints in one table per entity. Add a Mermaid ER diagram only if relationships are non-trivial. -->
@@ -80,7 +77,4 @@
 |-----------|-------|--------|--------------|--------------|
 
 ## File Structure Plan
-<!-- Concrete paths with one responsibility each. Every component above must appear here. Describe repeated patterns once. -->
-
-```
-```
+<!-- Concrete paths with one responsibility each. Every component above must appear here. Describe repeated patterns once. Use a code block for the directory tree. -->
