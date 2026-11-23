@@ -7,3 +7,4 @@
 
 | 番号 | タイトル | 状態 | 日付 |
 |---|---|---|---|
+| [0001](0001-spec-driven-ai-development-with-human-judgment.md) | cc-sdd による仕様駆動で、AI が実装・レビューし、人が判断する開発プロセスにする | accepted | 2026-11-23 |
