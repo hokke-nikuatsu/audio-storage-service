@@ -1,5 +1,4 @@
 @AGENTS.md
-@docs/conventions/workflow.md
 
 ## Claude Code 固有
 
