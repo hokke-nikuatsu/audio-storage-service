@@ -115,7 +115,7 @@
 - Detail density rules: <!-- project-override (see docs/adr/0002) -->
   - **Full block**: only components that introduce a boundary (ports, adapters, persistence, external processes). Show interface signatures in the project's language, never implementation code.
   - **Summary-only**: every other component gets a single row in the summary table and no block.
-- Implementation Notes must combine Integration / Validation / Risks into a single bulleted subsection to reduce repetition.
+- Do not add per-component Implementation Notes. <!-- project-override (see docs/adr/0002) -->
 - Prefer lists or inline descriptors for short data (dependencies, contract selections). Use tables only when comparing multiple items.
 
 ### Shared Interfaces & Props
