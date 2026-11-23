@@ -5,7 +5,6 @@
 
 **Rules**:
 - Target 200 lines or fewer for the whole document. MUST NOT exceed 250 lines; if it would, simplify the design or split the spec.
-- Sections up to "Related ADRs" are for human review. Sections after the separator are implementation references.
 - Do not restate steering or ADRs. Technology choices live in `.kiro/steering/tech.md` and `docs/adr/`; reference them as `ADR-NNNN`.
 - Keep the heading names below unchanged; write the body in the language set in `spec.json`.
 - Prefer tables and Mermaid diagrams over prose. Omit an optional section entirely instead of writing "N/A".
@@ -62,7 +61,7 @@
 |-------------|---------|------------|-------|
 
 ## Testing Strategy
-<!-- Derive each item from acceptance criteria. Name what is verified and the requirement IDs; no generic items. Split into unit and integration. -->
+<!-- Split into unit and integration. For each item, name what is verified and why; derive items from acceptance criteria, not generic patterns. The mapping to requirements lives in Requirements Traceability. -->
 
 ## Related ADRs
 <!-- Bullet list: ADR-NNNN — one-line reason it matters to this design. -->

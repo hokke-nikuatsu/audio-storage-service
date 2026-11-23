@@ -40,7 +40,7 @@ Before applying judgment, verify these mechanically:
 - **Boundary section populated**: `Boundary Commitments`, `Out of Boundary`, `Allowed Dependencies`, and `Revalidation Triggers` must not be empty or placeholder-only.
 - **File Structure Plan populated**: The File Structure Plan section must contain concrete file paths (not just "TBD" or empty). Scan for placeholder text in that section.
 - **Boundary ↔ file structure alignment**: The File Structure Plan must reflect the stated responsibility boundary. If files imply broader ownership than the boundary section claims, report a mismatch.
-- **Length budget** <!-- project-override (see docs/adr/0002) -->: The draft is 250 lines or fewer. If not, simplify before writing.
+- **Length budget**: The draft stays within the line limit stated in the design template. If not, simplify before writing. <!-- project-override (see docs/adr/0002) -->
 - **No orphan components**: Every component mentioned in the design must appear in the File Structure Plan with a file path. Scan for component names that have no corresponding file entry.
 
 ## Review Loop

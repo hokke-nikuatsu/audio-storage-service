@@ -202,9 +202,7 @@ graph TB
 
 These rules take precedence over the sections above when they conflict.
 
-- **Template order wins**: Follow the section order of `.kiro/settings/templates/specs/design.md`. Sections up to "Related ADRs" are written for human review; "Components and Interfaces" and "File Structure Plan" come last as implementation references.
-- **No Technology Stack section**: Technology choices live in `.kiro/steering/tech.md` and `docs/adr/`. Reference them by ADR number (`ADR-NNNN`) instead of restating versions or rationale.
-- **Do not restate steering or ADRs**: Link to the source and state only what is specific to this spec.
-- **Length budget**: Target 200 lines or fewer. MUST NOT exceed 250 lines.
+- **The template wins**: `.kiro/settings/templates/specs/design.md` defines the sections, their order, the line limit and what not to restate. Follow it over "Global Ordering" and any other guidance above.
+- **No Technology Stack section**: Do not write one, despite "Technology Stack" above. Reference technology choices by ADR number (`ADR-NNNN`).
 - **Detail density**: Full component blocks only for components that introduce a boundary (ports, adapters, persistence, external processes). Everything else is a single summary row. Show interface signatures in the project's language, never implementation code.
 <!-- project-override: end -->
