@@ -1,7 +1,8 @@
 ---
-status: accepted # proposed | accepted | deprecated | superseded by ADR-NNNN
+status: accepted # proposed | accepted | deprecated | superseded by ADR-NNNN | amended by ADR-NNNN
 date: YYYY-MM-DD
 irreversibility: 中 # 低 | 中 | 高（後から変えるときのコスト）
+# amends: ADR-NNNN（ほかの ADR の判断の一部を変えるときだけ書く）
 ---
 
 # ADR-NNNN: {解決した問題と選んだ解決策を表す短いタイトル}
@@ -38,4 +39,4 @@ irreversibility: 中 # 低 | 中 | 高（後から変えるときのコスト）
 
 ## 反映先
 
-{この判断を反映した steering・spec の場所。現時点の正はそちらにあり、この ADR は理由だけを残す}
+{この判断を反映した規約・steering・spec の場所。現時点の正はそちらにあり、この ADR は理由だけを残す}
