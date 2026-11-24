@@ -1,6 +1,6 @@
 ---
 name: adr
-description: 会話で人が決めた技術的な判断を、docs/adr/ に次の番号の ADR として記録し、一覧を更新する。判断を変える場合は古い ADR を置き換え済みにする。
+description: 会話で人が決めた技術的な判断を、docs/adr/ に次の番号の ADR として記録し、一覧を更新する。判断を変える場合は古い ADR を置き換え済み、または一部変更済みにする。
 disable-model-invocation: true
 argument-hint: "<判断の短い説明>"
 allowed-tools: Read, Write, Edit, Glob, Bash(ls:*), Bash(date:*)
