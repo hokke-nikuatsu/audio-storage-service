@@ -12,18 +12,18 @@
 | コードに関する規約 | `.kiro/steering/` | 技術スタック、アーキテクチャ、コーディング規約 | コードを読み書きする作業の前 |
 | 仕様 | `.kiro/specs/<feature>/` | 要件（requirements.md）、設計（design.md）、タスク（tasks.md） | その機能の spec や実装の作業の前 |
 | 判断の理由 | [docs/adr/](../adr/README.md) | 1つの判断につき1ファイル | 判断の理由を確かめるとき |
-| AI の入口 | [AGENTS.md](../../AGENTS.md)、[CLAUDE.md](../../CLAUDE.md) | 言語と、この規約の取り込み | — |
+| AI の入口 | [AGENTS.md](../../AGENTS.md)、[CLAUDE.md](../../CLAUDE.md) | 言語、この規約の取り込み、Claude Code 固有の設定 | — |
 | 人の入口 | [README.md](../../README.md) | 概要、起動方法、この表へのリンク | — |
 | 作業の記録 | [docs/worklog.md](../worklog.md) | フェーズごとにかかった時間 | — |
 
-- 同じことを2か所に書かない。現時点の正は規約・steering・spec に置き、ADR には判断の理由だけを書く
-- ADR は書き換えない。判断を変えるときは新しい ADR で置き換える
+- 同じことを2か所に書かない
+- ADR の書き方と運用は [docs/adr/README.md](../adr/README.md) にある
 - コードに経緯を書かない。経緯は ADR と PR に残す
-- ドキュメントを追加したら、`README.md` にリンクを足す
+- ドキュメントの種類を追加したら、この表に行を足す
 
 ## 開発の流れ
 
-cc-sdd による仕様駆動で進める。要件・設計・タスクは人が承認してから次へ進み、`-y` で承認を飛ばさない。
+cc-sdd による仕様駆動で進める。要件・設計・タスクは、人が内容を確認して承認してから次へ進む。承認したら、`.kiro/specs/<feature>/spec.json` の `approvals.<段階>.approved` を `true` にして記録する（人が書き換えるか、人の指示で AI が書き換える）。人の確認を経ずに承認済みにする `-y` は使わない。
 
 1. 要件: `/kiro-spec-init` → `/kiro-spec-requirements` → 人が requirements.md を承認する
 2. 設計: 技術選定を1つずつ決めて `/adr` で記録し、steering に反映する → `/kiro-spec-design` → 人が design.md を承認する
