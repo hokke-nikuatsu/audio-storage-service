@@ -5,8 +5,12 @@ pre-push:
     - name: actionlint
       run: mise exec -- actionlint
       fail_text: "直し方: docs/conventions/checks.md の「既存のツールが失敗したとき」"
+    - name: branch-name
+      run: scripts/checks/branch_name.sh
     - name: commit-author
       run: scripts/checks/commit_author.sh
+    - name: commit-message
+      run: scripts/checks/commit_message.sh
     - name: doc-line-count
       run: mise exec -- python3 scripts/checks/doc_line_count.py
     - name: gitleaks
