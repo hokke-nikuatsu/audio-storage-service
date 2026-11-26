@@ -36,11 +36,9 @@ cc-sdd（v3.1.0）の既定の design テンプレートは332行あり、1000�
 
 「テンプレートを主に作り直し、ルールは矛盾する箇所だけ書き換える」を選ぶ。内容は次のとおり。
 
-- design テンプレートを、前半を人がレビューする部分、後半を実装の参照に並べ替える
-- 長さは200行以内を目安とし、250行を上限とする
+- design テンプレートを、前半を人がレビューする部分、後半を実装の参照に並べ替え、長さは200行以内を目安とし、250行を上限とする
 - 技術スタックの表は書かない。技術の選定は steering と ADR に書き、design では ADR 番号で参照する
-- 構成・順番・行数の上限はテンプレートだけに書く。既定のルールのうちテンプレートと矛盾する箇所は、打ち消す指示を足すのではなく元の文を直接書き換え、矛盾をなくす。書き換えた箇所には `project-override` の印を付ける
-- SKILL.md 本体は書き換えない
+- 構成・順番・行数の上限はテンプレートだけに書く。既定のルールのうちテンプレートと矛盾する箇所は、打ち消す指示を足すのではなく元の文を直接書き換え、矛盾をなくす。書き換えた箇所には `project-override` の印を付け、SKILL.md 本体は書き換えない
 - 見出しは英語のまま、本文は日本語で書く
 - 要件 ID は cc-sdd の前提どおり数字（`1.2`）のままにする。cc-sdd の文書の外（テスト名、PR、ADR、コミット）では `REQ-1.2` と書き、requirements.md の該当 ID を指す
 - 人がレビューするのは requirements.md と design.md だけにし、spec.json・research.md・tasks.md は対象にしない
@@ -58,6 +56,5 @@ cc-sdd（v3.1.0）の既定の design テンプレートは332行あり、1000�
 
 ## 反映先
 
-- `.kiro/settings/templates/specs/design.md`
-- `.claude/skills/kiro-spec-design/rules/design-principles.md` と `design-review-gate.md` の `project-override` の印を付けた箇所
+- テンプレートの全体（`.kiro/settings/templates/specs/design.md`）と、ルールの `project-override` の印を付けた箇所（`.claude/skills/kiro-spec-design/rules/` の `design-principles.md` と `design-review-gate.md`）
 - 要件 ID の書き方は AGENTS.md（ADR-0003 で作成）
