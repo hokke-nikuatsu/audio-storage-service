@@ -8,7 +8,7 @@
 
 ```sh
 mise install
-lefthook install
+mise exec -- lefthook install
 ```
 
 ## 流れ
