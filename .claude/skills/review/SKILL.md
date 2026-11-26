@@ -1,24 +1,40 @@
 ---
 name: review
-description: 今のブランチの変更を、変更の種類に合わせた観点のサブエージェントで並列にレビューし、すべての指摘の妥当性を検証して確定した結果を .review/ に書き出す。approve はしない。
+description: 今のブランチの変更を、会話の履歴を持たない別のセッションでレビューし、結果を .review/ に書き出して報告する。別のセッションでは、変更の種類に合わせた観点のサブエージェントで並列にレビューし、すべての指摘の妥当性を検証して確定する。approve はしない。
 disable-model-invocation: true
+argument-hint: "[here]"
 model: opus
 effort: high
-allowed-tools: Read, Grep, Glob, Write, Agent, Bash(git status:*), Bash(git log:*), Bash(git diff:*), Bash(git rev-parse:*), Bash(git branch:*), Bash(git fetch:*), Bash(git ls-remote:*), Bash(git check-attr:*), Bash(gh pr view:*), Bash(ls:*), Bash(rm .review/*), Bash(mkdir:*), Bash(date:*)
+allowed-tools: Read, Grep, Glob, Write, Agent, Bash(git status:*), Bash(git log:*), Bash(git diff:*), Bash(git rev-parse:*), Bash(git branch:*), Bash(git fetch:*), Bash(git ls-remote:*), Bash(git check-attr:*), Bash(gh pr view:*), Bash(ls:*), Bash(rm .review/*), Bash(mkdir:*), Bash(date:*), Bash(claude -p:*)
 ---
 
 # 変更をレビューする
 
 レビューの観点・指摘の書き方・指摘の数・優先度・指摘しない範囲は `docs/conventions/review.md` を正とし、このファイルに複製しない。
 
+## 呼び方
+
+- 引数なし（`/review`）: 「別のセッションを起動する」の手順で、会話の履歴を持たない新しいセッションを起動し、その中で `/review here` を実行させる。自分が書いたコードを同じ文脈でレビューすると甘くなるため、レビューそのものはこの会話では行わない
+- `here`（`/review here`）: 「レビューする」の手順で、このセッションの中でレビューする。引数なしの呼び方が起動したセッションの中で使う。会話の中で実装をしていた場合は、レビューせずに止まり、引数なしで呼ぶよう人に伝える
+
 ## 前提
 
-- 実装したのと同じ会話で呼ばれたら、新しいセッションで実行するよう人に伝えて止まる。自分が書いたコードを同じ文脈でレビューすると甘くなるため
 - コードを直さない。コミット、プッシュ、GitHub への投稿、approve をしない
 - 「マージしてよい」とは書かない。判断は人がする
 - モデルの使い分け: 観点ごとの洗い出しはサブエージェント（Sonnet）に任せ、変更の種類の判定と、指摘の検証・確定はこの skill を動かすモデル（Opus）が行う。検証と確定には、コードを読み直して判断する力が要るため
 
-## 手順
+## 別のセッションを起動する（引数なし）
+
+1. 今のブランチ名と HEAD のコミット SHA を記録する
+2. Bash ツールを `run_in_background` で使い、次のコマンドを実行する。`--allowedTools` には、この skill の front matter の `allowed-tools` と同じものを渡す。新しいセッションでは確認を出せず、サブエージェントの操作もこの許可で決まるため
+   ```
+   claude -p "/review here" --model opus --effort high --allowedTools <allowed-tools と同じもの> < /dev/null
+   ```
+3. 起動したことと、終わるまでこのブランチにコミットしないこと（HEAD が変わると結果が古くなるため）を人に伝え、終了の通知を待つ
+4. 終了の通知が来たら、`.review/<ブランチ名>.md`（`/` は `-` に置き換える）を読む。結果に書かれた HEAD が手順1で記録したものと違えば、結果が古いことを伝える。ファイルがない、または起動したコマンドが失敗した場合は、その出力を人に伝えて止まる
+5. 指摘の件数と、Critical・High の内容を人に伝える。起動したセッションの出力に、消した古い結果が書かれていれば、それも伝える
+
+## レビューする（`here`）
 
 1. `docs/conventions/review.md` を読む
 2. マージ済みのブランチの結果を消す
