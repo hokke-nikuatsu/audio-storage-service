@@ -4,3 +4,5 @@ pre-push:
   jobs:
     - name: actionlint
       run: mise exec -- actionlint
+    - name: doc-line-count
+      run: mise exec -- python3 scripts/checks/doc_line_count.py
