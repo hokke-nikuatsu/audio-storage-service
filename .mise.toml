@@ -1,0 +1,4 @@
+# チェック用のコマンドラインツールのバージョンを固定する（docs/conventions/checks.md）
+[tools]
+actionlint = "1.7.12"
+lefthook = "2.2.3"
