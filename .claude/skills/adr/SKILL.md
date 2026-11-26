@@ -27,7 +27,7 @@ allowed-tools: Read, Write, Edit, Glob, Bash(ls:*), Bash(date:*)
    - `irreversibility` は、後から変えるときのコストで判断する。判断に迷ったら人に確認する
    - `## 影響` の「本番運用なら」には、今回の実装の範囲を超えて本番ではどうするかを書く。該当しなければ行ごと消す
    - `## 見直し条件` は「規模が大きくなったら」のような曖昧な書き方をせず、観測できる条件で書く
-   - 60行以内を目安にする
+   - 長さは `docs/adr/README.md` の目安と上限に収める
 5. 既存の ADR の判断を変える場合は、古い ADR の front matter の `status` だけを変える。古い ADR の本文は書き換えない
    - 判断を丸ごと変える: `superseded by ADR-NNNN`
    - 判断の一部だけを変える: `amended by ADR-NNNN`。新しい ADR の front matter に `amends: ADR-NNNN` を書き、決定に「どの判断を変え、ほかは有効なまま」かを書く

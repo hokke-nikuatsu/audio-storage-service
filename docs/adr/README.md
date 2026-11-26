@@ -6,6 +6,7 @@
   - 判断を丸ごと変えるとき: 古い ADR を `superseded by ADR-NNNN` にする
   - 判断の一部だけを変えるとき: 古い ADR を `amended by ADR-NNNN` にし、新しい ADR の front matter の `amends` に古い ADR を書く。古い ADR のほかの決定は有効なまま
 - 1つの ADR には1つの判断だけを書く
+- 長さは60行以内を目安とし、80行を上限とする
 - 現時点の正は、作業の進め方の規約（`docs/conventions/`）、コードに関する規約（steering）、仕様（spec）に置く。ADR はその理由だけを持つ
 
 | 番号 | タイトル | 状態 | 日付 |
