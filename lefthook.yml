@@ -1,0 +1,6 @@
+# チェックのコマンドはここにだけ書く。CI も `lefthook run pre-push` でこれを呼ぶ（docs/conventions/checks.md）
+pre-push:
+  parallel: true
+  jobs:
+    - name: actionlint
+      run: mise exec -- actionlint
