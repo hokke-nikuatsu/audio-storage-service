@@ -85,6 +85,7 @@ allowed-tools: Read, Grep, Glob, Write, Agent, Bash(git status:*), Bash(git log:
 - 「何が起きるか」と「なぜ問題か」は、それぞれ2文まで
 - 引用は10行まで。差分は変わる箇所だけで15行まで。収まらない修正は、手順を箇条書きにし、要所の差分だけを示す
 - 「確かめたこと」は Critical と High にだけ書き、1文にする
+- 一覧表は開いたままにし、指摘の詳細は1件ずつ閉じた状態の折りたたみ（`<details>`）にする。人は一覧表で全体を見て、詳しく読みたい指摘だけを開く
 - 「概要」には一覧表だけを書き、件数や要点をまとめた文は書かない。指摘が0件のときは、「概要」に「指摘なし」とだけ書き、一覧表と指摘の詳細は書かない
 
 ````markdown
@@ -101,9 +102,7 @@ allowed-tools: Read, Grep, Glob, Write, Agent, Bash(git status:*), Bash(git log:
 - 変更の種類: <ドキュメントだけ / それ以外>（<動かしたサブエージェント>）。対象から外したファイル: <ファイル、または「なし」>
 </details>
 
----
-
-#### R-1 [<優先度>] <一行の要約>
+<details><summary>R-1 [<優先度>] <一行の要約></summary>
 
 **何が起きるか**：<どんな状況で、どんな結果になるか>
 
@@ -121,7 +120,7 @@ allowed-tools: Read, Grep, Glob, Write, Agent, Bash(git status:*), Bash(git log:
 
 **確かめたこと**：<Critical・High のとき、読んで確かめたファイルと箇所>
 
----
+</details>
 
 <details><summary>取り下げた指摘（<n>件）</summary>
 
