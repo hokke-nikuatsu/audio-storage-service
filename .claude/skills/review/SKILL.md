@@ -5,7 +5,7 @@ disable-model-invocation: true
 argument-hint: "[here]"
 model: opus
 effort: high
-allowed-tools: Read, Grep, Glob, Write, Agent, Bash(git status:*), Bash(git log:*), Bash(git diff:*), Bash(git rev-parse:*), Bash(git branch:*), Bash(git fetch:*), Bash(git ls-remote:*), Bash(git check-attr:*), Bash(gh pr view:*), Bash(ls:*), Bash(rm .review/*), Bash(mkdir:*), Bash(date:*), Bash(claude -p:*)
+allowed-tools: Read, Grep, Glob, Write, Agent, Bash(git status:*), Bash(git log:*), Bash(git diff:*), Bash(git rev-parse:*), Bash(git branch:*), Bash(git fetch:*), Bash(git check-attr:*), Bash(gh pr view:*), Bash(ls:*), Bash(rm .review/*), Bash(mkdir:*), Bash(date:*), Bash(claude -p:*)
 ---
 
 # 変更をレビューする
@@ -38,8 +38,8 @@ allowed-tools: Read, Grep, Glob, Write, Agent, Bash(git status:*), Bash(git log:
 
 1. `docs/conventions/review.md` を読む
 2. マージ済みのブランチの結果を消す
-   - `git fetch --prune` してから、`.review/` にあるファイルごとに、対応するブランチがリモートにまだあるか（`git ls-remote --heads origin <ブランチ名>`）を確かめる。ファイル名の `-` は `/` だった可能性があるので、`git branch -a` の一覧と照らして対応を決める
-   - リモートにないブランチ（マージ後に自動で削除されたもの）の結果だけを消す。対応が決められないファイルは消さずに人に伝える
+   - `git fetch --prune` してから、`.review/` にあるファイルごとに、対応するブランチを `git branch -vv` の一覧から決める。ファイル名の `-` は `/` だった可能性がある
+   - 上流が `gone` のブランチ（プッシュ後、マージで自動的に削除されたもの）の結果だけを消す。上流のないブランチ（まだプッシュしていないもの）の結果と、対応が決められないファイルは消さずに人に伝える
 3. 対象を決め、事前に確かめる
    - 今のブランチに PR があれば `gh pr view --json baseRefName,title,body` で向き先と目的を読み、なければ向き先を main とする
    - 向き先との差分（`git diff origin/<向き先>...HEAD`）、コミット（`git log origin/<向き先>..HEAD`）、HEAD のコミット SHA を読む
