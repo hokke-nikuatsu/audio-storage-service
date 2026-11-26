@@ -18,12 +18,16 @@ is_allowed() {
   return 1
 }
 
+# プロセス置換では git log の失敗で止まらないので、いったん変数に受ける
+commits=$(git log --format='%h%x09%ae%x09%ce' origin/main..HEAD)
+
 failed=0
 while IFS=$'\t' read -r sha author committer; do
+  [[ -z "$sha" ]] && continue
   if ! is_allowed "$author" || ! is_allowed "$committer"; then
     echo "エラー: コミット ${sha} の著者（${author}）かコミッター（${committer}）が、個人のアカウントのメールアドレスではない。根拠: docs/conventions/workflow.md の「コミット」"
     failed=1
   fi
-done < <(git log --format='%h%x09%ae%x09%ce' origin/main..HEAD)
+done <<< "$commits"
 
 exit "$failed"
