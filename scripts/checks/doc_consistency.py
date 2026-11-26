@@ -33,7 +33,7 @@ def table_rows(text: str) -> list[list[str]]:
     """Markdown の表の本文の行を、セルのリストにする。見出しと区切りの行は除く。"""
     rows: list[list[str]] = []
     for line in text.splitlines():
-        if re.fullmatch(r"\|[-| ]+\|", line):
+        if re.fullmatch(r"\|[-:| ]+\|", line.rstrip()):
             rows.pop()
         elif line.startswith("|"):
             rows.append([cell.strip() for cell in line.strip("|").split("|")])
