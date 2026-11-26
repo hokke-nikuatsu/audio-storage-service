@@ -139,7 +139,7 @@ For each task (one at a time):
 - Stage only the files actually changed for this task, plus tasks.md
 - **NEVER** use `git add -A` or `git add .`
 - Use `git add <file1> <file2> ...` with explicit file paths
-- Commit message format: `feat(<feature-name>): <task description>`
+- Commit message: follow the コミット section of `docs/conventions/workflow.md` <!-- project-override (see docs/adr/0006) -->
 
 **f) Record learnings**:
 - If this task revealed cross-cutting insights, append a one-line note to the `## Implementation Notes` section at the bottom of tasks.md
