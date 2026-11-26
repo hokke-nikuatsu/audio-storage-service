@@ -4,5 +4,9 @@ pre-push:
   jobs:
     - name: actionlint
       run: mise exec -- actionlint
+    - name: doc-consistency
+      run: mise exec -- python3 scripts/checks/doc_consistency.py
     - name: doc-line-count
       run: mise exec -- python3 scripts/checks/doc_line_count.py
+    - name: doc-links
+      run: git ls-files -z '*.md' | xargs -0 mise exec -- lychee --offline --include-fragments --no-progress
