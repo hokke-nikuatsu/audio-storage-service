@@ -4,5 +4,11 @@ pre-push:
   jobs:
     - name: actionlint
       run: mise exec -- actionlint
+    - name: commit-author
+      run: scripts/checks/commit_author.sh
     - name: doc-line-count
       run: mise exec -- python3 scripts/checks/doc_line_count.py
+    - name: gitleaks
+      run: mise exec -- gitleaks git --redact --verbose --no-banner
+    - name: shellcheck
+      run: git ls-files -z '*.sh' | xargs -0 mise exec -- shellcheck
