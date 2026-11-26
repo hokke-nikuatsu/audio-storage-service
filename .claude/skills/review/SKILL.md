@@ -5,7 +5,7 @@ disable-model-invocation: true
 argument-hint: "[here]"
 model: opus
 effort: high
-allowed-tools: Read, Grep, Glob, Write, Agent, Bash(git status:*), Bash(git log:*), Bash(git diff:*), Bash(git rev-parse:*), Bash(git branch:*), Bash(git fetch:*), Bash(git check-attr:*), Bash(gh pr view:*), Bash(ls:*), Bash(rm .review/*), Bash(mkdir:*), Bash(date:*), Bash(claude -p:*)
+allowed-tools: Read, Grep, Glob, Edit(.review/**), Agent, Bash(git status:*), Bash(git log:*), Bash(git diff:*), Bash(git show:*), Bash(git rev-parse:*), Bash(git branch:*), Bash(git fetch:*), Bash(git check-attr:*), Bash(gh pr view:*), Bash(ls:*), Bash(rm .review/*), Bash(mkdir -p .review), Bash(date:*), Bash(claude -p:*)
 ---
 
 # 変更をレビューする
@@ -26,10 +26,12 @@ allowed-tools: Read, Grep, Glob, Write, Agent, Bash(git status:*), Bash(git log:
 ## 別のセッションを起動する（引数なし）
 
 1. 今のブランチ名と HEAD のコミット SHA を記録する
-2. Bash ツールを `run_in_background` で使い、次のコマンドを実行する。`--allowedTools` には、この skill の front matter の `allowed-tools` と同じものを渡す。新しいセッションでは確認を出せず、サブエージェントの操作もこの許可で決まるため
+2. Bash ツールを `run_in_background` で使い、次のコマンドを実行する
    ```
-   claude -p "/review here" --model opus --effort high --allowedTools <allowed-tools と同じもの> < /dev/null
+   claude -p "/review here" --setting-sources project,local --model opus --effort high --allowedTools <許可> < /dev/null
    ```
+   - `<許可>` には、この skill の front matter の `allowed-tools` から `Bash(claude -p:*)` を除いたものを、1つずつ引数として渡す。新しいセッションの中から、さらにセッションを起動させないため
+   - `--setting-sources project,local` は外さない。ユーザー設定に広い許可があると、`--allowedTools` で絞っても新しいセッションとサブエージェントが任意のコマンドを実行できてしまうため。ユーザー設定を読まないことで、渡した許可だけが効く（書き込みは `.review/` の中だけ、コマンドは読むためのものだけ）
 3. 起動したことと、終わるまでこのブランチにコミットしないこと（HEAD が変わると結果が古くなるため）を人に伝え、終了の通知を待つ
 4. 終了の通知が来たら、`.review/<ブランチ名>.md`（`/` は `-` に置き換える）を読む。結果に書かれた HEAD が手順1で記録したものと違えば、結果が古いことを伝える。ファイルがない、または起動したコマンドが失敗した場合は、その出力を人に伝えて止まる
 5. 指摘の件数と、Critical・High の内容を人に伝える。起動したセッションの出力に、消した古い結果が書かれていれば、それも伝える
@@ -55,7 +57,7 @@ allowed-tools: Read, Grep, Glob, Write, Agent, Bash(git status:*), Bash(git log:
 
    - skill は AI の動きを、スクリプトや設定はツールの動きを変えるので、拡張子が `.md` でも「それ以外」として扱う
    - 外から来る入力の検証、ファイル、外部プロセス、DB、認証に触る変更なら、「正しさとセキュリティ」にその部分を重点として伝える
-5. 決めたサブエージェントを、Agent ツールで1つのメッセージから並列に起動する。モデルは `sonnet` を指定する。担当する観点は次のとおり
+5. 決めたサブエージェントを、Agent ツールで1つのメッセージから並列に起動する。モデルは `sonnet` を指定し、`run_in_background: false` でフォアグラウンドで動かす。バックグラウンドで動かすと、`claude -p` のセッションが待ちきれずに途中で終わるため。担当する観点は次のとおり
    - 仕様とシンプルさ: 仕様との一致、シンプルさ
    - 正しさとセキュリティ: 正しさ、セキュリティ
    - 構造: 設計と境界、テスト、読みやすさ
@@ -63,6 +65,7 @@ allowed-tools: Read, Grep, Glob, Write, Agent, Bash(git status:*), Bash(git log:
    各サブエージェントに渡すもの
    - 向き先と比較範囲（`origin/<向き先>...HEAD`）、対象から外したファイル、PR の目的、根拠になる文書のパス、重点（あれば）
    - 担当する観点と、`docs/conventions/review.md` を読んでその規約に従うこと（指摘しない範囲を除く、確信がないものは出さない）
+   - 読んで判断すること。挙動を確かめるためにコマンドを実行しない、ファイルを作らない、`claude` を起動しない。使ってよいのは、ファイルを読むことと、`git diff`・`git log`・`git show` だけ。読んで判断できないことは、確信がないものとして出さない
    - 件数の目安は伝えない。「指摘の数」の節のとおり、問題がなければ0件と返してよいこと、見つかった問題はすべて返すことをはっきり伝える
    - 返す形式: 指摘ごとに、観点、仮の優先度、場所（ファイル:行）、何が起きるか、なぜ問題か（根拠の文書の該当箇所を含む）、該当コードの引用、修正の方針と差分。引用は実物からそのまま写すこと
 6. すべての指摘の妥当性を検証し、内容を確定する（ここはサブエージェントに任せない）
