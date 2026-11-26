@@ -19,7 +19,7 @@ allowed-tools: Read, Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash
 
 1. `docs/conventions/workflow.md` の「コミット」を読む
 2. 前提を確かめ、満たさなければ止まって人に伝える
-   - 今のブランチ（`git branch --show-current`）が main でない。main には PR を経由してだけ入れるため
+   - 今のブランチ（`git branch --show-current`）が空（detached HEAD）でも main でもない。main には PR を経由してだけ入れるため
    - `git config --local --get user.name` と `git config --local --get user.email` が設定されている。設定がないと、グローバルの設定の別のアカウントが著者になるため
 3. `git status`、`git diff`、`git diff --cached` で変更を読み、未追跡のファイルは Read で読む。`git log -10` で直近のメッセージの書き方を確かめる
 4. 関心ごとに分ける
