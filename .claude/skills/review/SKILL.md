@@ -28,10 +28,10 @@ allowed-tools: Read, Grep, Glob, Edit(.review/**), Agent, Bash(git status:*), Ba
 1. 今のブランチ名と HEAD のコミット SHA を記録する
 2. Bash ツールを `run_in_background` で使い、次のコマンドを実行する
    ```
-   claude -p "/review here" --setting-sources project,local --model opus --effort high --allowedTools <許可> < /dev/null
+   claude -p "/review here" --setting-sources project --model opus --effort high --allowedTools <許可> < /dev/null
    ```
    - `<許可>` には、この skill の front matter の `allowed-tools` から `Bash(claude -p:*)` を除いたものを、1つずつ引数として渡す。新しいセッションの中から、さらにセッションを起動させないため
-   - `--setting-sources project,local` は外さない。ユーザー設定に広い許可があると、`--allowedTools` で絞っても新しいセッションとサブエージェントが任意のコマンドを実行できてしまうため。ユーザー設定を読まないことで、渡した許可だけが効く（書き込みは `.review/` の中だけ、コマンドは読むためのものだけ）
+   - `--setting-sources project` は変えない。ユーザー設定やローカル設定（`.claude/settings.local.json`）に広い許可があると、`--allowedTools` で絞っても新しいセッションとサブエージェントが任意のコマンドを実行できてしまうため。リポジトリにコミットされた設定だけを読むことで、渡した許可だけが効く（書き込みは `.review/` の中だけ、コマンドは読むためのものだけ）
 3. 起動したことと、終わるまでこのブランチにコミットしないこと（HEAD が変わると結果が古くなるため）を人に伝え、終了の通知を待つ
 4. 終了の通知が来たら、`.review/<ブランチ名>.md`（`/` は `-` に置き換える）を読む。結果に書かれた HEAD が手順1で記録したものと違えば、結果が古いことを伝える。ファイルがない、または起動したコマンドが失敗した場合は、その出力を人に伝えて止まる
 5. 指摘の件数と、Critical・High の内容を人に伝える。起動したセッションの出力に、消した古い結果が書かれていれば、それも伝える
