@@ -3,3 +3,6 @@
 
 # OS
 .DS_Store
+
+# /review の結果。PR 本文に入れるため手元にだけ置く
+/.review/
