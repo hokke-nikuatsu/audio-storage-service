@@ -20,6 +20,6 @@ lefthook install
 ## チェックの追加
 
 - チェックのコマンドは `lefthook.yml` にだけ書く。手元で確かめられないチェックだけを [CI](../../.github/workflows/ci.yml) のジョブにし、`ci-status` の `needs` に加える
-- 既存のツールがあればそれを使い、バージョンを [.mise.toml](../../.mise.toml) で固定する
+- 既存のツールがあればそれを使い、バージョンを [.mise.toml](../../.mise.toml) で固定して、`lefthook.yml` からは `mise exec --` を付けて呼ぶ
 - 既存のツールがない独自のルールは `scripts/checks/` に置く。簡単なもの（著者、タイトル、ブランチ名など）はシェルで、ドキュメントの検査は Python の標準ライブラリだけで書く
 - 失敗したときのメッセージには、根拠のドキュメントを示す

@@ -3,4 +3,4 @@ pre-push:
   parallel: true
   jobs:
     - name: actionlint
-      run: actionlint
+      run: mise exec -- actionlint
