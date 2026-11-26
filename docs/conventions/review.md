@@ -60,3 +60,4 @@ AI は approve もマージもしない。
 |---|---|
 | cc-sdd が生成したファイル（`.gitattributes` で `linguist-generated` のもの） | 生成物で、人が手を入れていない |
 | GitHub Actions のワークフローの書き方 | actionlint（`lefthook.yml` の `pre-push`） |
+| ADR と design.md の行数 | doc-line-count（`lefthook.yml` の `pre-push`） |
