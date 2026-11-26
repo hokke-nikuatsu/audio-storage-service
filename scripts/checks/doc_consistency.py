@@ -84,6 +84,9 @@ def check_adrs() -> None:
 
     listed = set()
     for row in table_rows(ADR_INDEX.read_text(encoding="utf-8")):
+        if len(row) != 4:
+            error(f"ADR の一覧の行（{row[0]}）の列の数が4つでない", "docs/adr/README.md")
+            continue
         link = re.fullmatch(r"\[(\d{4})\]\((\d{4})-.+\.md\)", row[0])
         if not link or link.group(1) != link.group(2):
             error(f"ADR の一覧の行（{row[0]}）の番号がリンク先のファイル名と違う", "docs/adr/README.md")
