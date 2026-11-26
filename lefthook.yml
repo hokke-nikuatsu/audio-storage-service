@@ -4,11 +4,14 @@ pre-push:
   jobs:
     - name: actionlint
       run: mise exec -- actionlint
+      fail_text: "直し方: docs/conventions/checks.md の「既存のツールが失敗したとき」"
     - name: commit-author
       run: scripts/checks/commit_author.sh
     - name: doc-line-count
       run: mise exec -- python3 scripts/checks/doc_line_count.py
     - name: gitleaks
       run: mise exec -- gitleaks git --redact --verbose --no-banner
+      fail_text: "直し方: docs/conventions/checks.md の「既存のツールが失敗したとき」"
     - name: shellcheck
       run: git ls-files -z '*.sh' | xargs -0 mise exec -- shellcheck
+      fail_text: "直し方: docs/conventions/checks.md の「既存のツールが失敗したとき」"
