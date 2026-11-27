@@ -30,4 +30,5 @@
 | [0015](0015-use-sqlite-embedded-in-service.md) | データベースはサービスに組み込む SQLite にする | accepted | 2026-11-27 |
 | [0016](0016-access-database-with-jooq.md) | データベースへのアクセスは、スキーマから生成した jOOQ のコードで行う | accepted | 2026-11-27 |
 | [0017](0017-migrate-schema-with-flyway.md) | スキーマは Flyway の SQL のマイグレーションで管理し、初期データは別の場所に置く | accepted | 2026-11-27 |
+| [0018](0018-build-and-run-in-single-container.md) | Dockerfile の中でビルドし、Ubuntu ベースの1つのコンテナで動かす | accepted | 2026-11-27 |
 <!-- adr-index:end -->

@@ -16,6 +16,13 @@
 - **変換**: ffmpeg のコマンドを `ProcessBuilder` で起動し、一時ファイルで受け渡す。変換の前に ffprobe で、コンテナが MP4、コーデックが AAC であることを確かめる
 - **保存先**: 録音は `{user_id}/{phrase_id}/{UUID}.wav` に保存のたびに一意な名前で書く。置き換えは「新しいファイルを書く → DB のパスを切り替える → 古いファイルを消す」の順に行い、DB の切り替えが失敗したら新しいファイルを消す。DB には、設定で持つルートのディレクトリからの相対パスを書く
 
+## Runtime Environment
+
+- Dockerfile の中でマルチステージでビルドし、実行の段は `eclipse-temurin:25-jre`（Ubuntu ベース）に `apt` で ffmpeg を入れる
+- コンテナの中では root ではないユーザーで 8080 番で待ち受け、ホストの 80 番に割り当てる
+- `/data` をボリュームにし、DB のファイルと録音のファイルをその下に置く
+- 起動は1サービスだけの `compose.yaml`（`docker compose up --build`）で行い、Docker で動かすときは初期データを流す
+
 ## Development Standards
 
 ### Code Quality
@@ -44,3 +51,4 @@
 - データベース: [ADR-0015](../../docs/adr/0015-use-sqlite-embedded-in-service.md)
 - データベースへのアクセス: [ADR-0016](../../docs/adr/0016-access-database-with-jooq.md)
 - マイグレーションと初期データ: [ADR-0017](../../docs/adr/0017-migrate-schema-with-flyway.md)
+- 実行環境: [ADR-0018](../../docs/adr/0018-build-and-run-in-single-container.md)
