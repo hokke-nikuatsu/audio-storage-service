@@ -55,7 +55,7 @@ Audio Storage Service は、ユーザーが練習フレーズを声に出して�
 **Objective:** サービスを動かして確かめる人として、決められた手順のとおりに試すために、決められた形で録音を保存して取り出したい
 
 #### Acceptance Criteria
-1. Audio Storage Service は常に、手元のマシンで起動したとき、ポートを指定しない `http://localhost/` で要求を受け付ける
+1. 手元のマシンで起動している間、Audio Storage Service はポートを指定しない `http://localhost/` で要求を受け付ける
 2. Audio Storage Service は常に、保存の要求では音声ファイルを `audio_file` という名前のフォームのフィールドで受け取る
 3. Audio Storage Service は常に、録音をサーバーのディスクにファイルとして保存する
 4. Audio Storage Service は常に、データベースに、有効なユーザー ID の表、有効なフレーズ ID の表、保存したファイルのパスとユーザー ID・フレーズ ID の対応の表の3つを持ち、保存したファイルのパスを対応の表に記録する
