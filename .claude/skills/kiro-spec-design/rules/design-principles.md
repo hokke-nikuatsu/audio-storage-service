@@ -80,7 +80,7 @@
 ## Section Authoring Guidance
 
 ### Global Ordering
-- Follow the sections, their order and the line limit of `.kiro/settings/templates/specs/design.md`. Sections before the separator are for human review; Components and Interfaces and File Structure Plan come last as implementation references. <!-- project-override (see docs/adr/0002) -->
+- Follow the sections, their order and the line limit of `.kiro/settings/templates/specs/design.md`. Sections before the `# Implementation References` heading are for human review; Components and Interfaces and File Structure Plan come last, under that heading, as implementation references. <!-- project-override (see docs/adr/0002, docs/adr/0021) -->
 - Within each section, follow **Summary → Scope → Decisions → Impacts/Risks** so reviewers can scan consistently.
 
 ### Requirement IDs

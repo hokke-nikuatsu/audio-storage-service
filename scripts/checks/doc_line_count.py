@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """ADR と design.md の行数を確かめる。目安を超えたら警告し、上限を超えたら失敗する。
 
-design.md は、人がレビューする前半（最初の `---` の行より上）だけを数える。
+design.md は、人がレビューする前半（`# Implementation References` の見出しより上）だけを数える。
+見出しがなければ全体を数える。
 """
 
 import sys
@@ -14,7 +15,7 @@ RULES = [
     ("docs/adr/[0-9][0-9][0-9][0-9]-*.md", 60, 80, "docs/adr/README.md", False),
     (".kiro/specs/*/design.md", 150, 200, ".kiro/settings/templates/specs/design.md（ADR-0021）", True),
 ]
-SEPARATOR = "---"
+SEPARATOR = "# Implementation References"
 
 
 def count_lines(path: Path, review_part_only: bool) -> int:
