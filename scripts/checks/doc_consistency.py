@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 """2か所に書いている情報が食い違っていないかを確かめる。
 
-- ADR の一覧の表が、各 ADR の front matter・H1 から作ったものと同じか
-- ADR どうしの番号と status、amends と amended by の対応
-- lefthook.yml の pre-push のジョブと、レビューの指摘しない範囲の表
+確かめていることの一覧はここだけに書き、docs/conventions/review.md の「指摘しない範囲」はここを参照する。
+
+- ADR の front matter と lefthook.yml が、YAML として読めるか
+- ADR の番号が、ファイルどうしで重複していないか
+- ADR の H1 の番号が、ファイル名の番号と同じか
+- ADR の status がテンプレートにある値で、指している ADR があるか
+- amends と amended by が両側で対応し、指している ADR があるか
+- ADR の一覧の表が印で囲まれ、各 ADR の front matter・H1 から作ったものと同じか
+- lefthook.yml の pre-push のジョブに name があり、ジョブとレビューの指摘しない範囲の表の行が対応しているか
 
 --fix を付けると、ADR の一覧の表を各 ADR から作り直す。
 YAML は yq で読む。
