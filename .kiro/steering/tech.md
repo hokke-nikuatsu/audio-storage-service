@@ -7,7 +7,7 @@
 - **Runtime**: Java 25
 - **Database**: SQLite（ファイル）。サービスのプロセスに組み込み、外部キーの検査は接続ごとに有効にする
 - **Database Access**: jOOQ。マイグレーションを流した一時的な SQLite のファイルからコードを生成し、生成したコードと jOOQ への依存は `adapter` にだけ置く
-- **Migration**: Flyway の SQL のマイグレーション。スキーマは `db/migration`、初期データ（有効なユーザー ID とフレーズ ID）は `db/seed` に置き、初期データを流すかは設定で切り替える。jOOQ のコード生成には `db/migration` だけを使う
+- **Migration**: Flyway の SQL のマイグレーション。スキーマは `db/migration`、初期データ（有効なユーザー ID とフレーズ ID）は `db/seed` に置き、サービスの起動時には両方を流す。jOOQ のコード生成には `db/migration` だけを使う
 
 ## Audio Formats
 
@@ -21,7 +21,7 @@
 - Dockerfile の中でマルチステージでビルドし、実行の段は `eclipse-temurin:25-jre`（Ubuntu ベース）に `apt` で ffmpeg を入れる
 - コンテナの中では root ではないユーザーで 8080 番で待ち受け、ホストの 80 番に割り当てる
 - `/data` をボリュームにし、DB のファイルと録音のファイルをその下に置く
-- 起動は1サービスだけの `compose.yaml`（`docker compose up --build`）で行い、Docker で動かすときは初期データを流す
+- 起動は1サービスだけの `compose.yaml`（`docker compose up --build`）で行う
 
 ## Development Standards
 
