@@ -2,11 +2,20 @@
 
 ## Core Technologies
 
-- **Language**: Kotlin
-- **Framework**: Spring Boot。リクエストは Spring MVC（ブロッキング）で処理し、WebFlux やコルーチンは使わない
+- **Language**: Kotlin 2.3 系
+- **Framework**: Spring Boot 4.1。リクエストは Spring MVC（ブロッキング）で処理し、WebFlux やコルーチンは使わない
+- **Runtime**: Java 25
+
+## Development Environment
+
+### Required Tools
+
+- ビルドは Gradle 9 系の Kotlin DSL（`build.gradle.kts`）で書き、Gradle Wrapper で実行する
+- JDK のバージョンは Gradle の toolchain で `build.gradle.kts` に書き、手元に入れずに Gradle に取ってこさせる。mise では管理しない
 
 ## Key Technical Decisions
 
 判断の理由は ADR にある。
 
 - 言語とフレームワーク: [ADR-0007](../../docs/adr/0007-use-kotlin-and-spring-boot-mvc.md)
+- ビルドツールと JDK の固定: [ADR-0008](../../docs/adr/0008-build-with-gradle-and-pin-jdk-by-toolchain.md)
