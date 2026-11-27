@@ -83,7 +83,7 @@ erDiagram
 | GET | `/audio/user/{user_id}/phrase/{phrase_id}/{audio_format}` | `audio_format` は `m4a` | 200、`Content-Type: audio/mp4`、本文は m4a | 400、404、500 |
 
 - ID の形式は、先頭が 0 ではない数字だけの並び（正規表現で `[1-9][0-9]*`）で、`Long` に収まるもの（1〜9223372036854775807）。それ以外は、登録されていない ID と同じに扱う（3.2、3.3）。`audio_format` は小文字の `m4a` だけを受け付ける
-- ファイルの上限は 10MB にする。数秒から十数秒の録音は 1MB 未満のため。上限を超えた本文を Tomcat が読み捨てずに接続を切ると 413 が届かないので、読み捨ての上限（`server.tomcat.max-swallow-size`）を 100MB に広げる
+- ファイルの上限は 10MB にする。数秒から十数秒の録音は 1MB 未満のため。上限を超えた本文を Tomcat が読み捨てずに接続を切ると 413 が届かないので、読み捨ての上限（`server.tomcat.max-swallow-size`）を 100MB に広げる。変換後の WAV にも 200MB の上限を設け、ビットレートをごく低くして長い音声を 10MB に詰めた m4a で、ディスクを埋められないようにする（普通の音質の 10MB の m4a は、WAV で約 100MB）
 - エラーの本文は、エラーの JSON の形を決めた標準（RFC 9457 の Problem Details）に合わせ、Spring の `ProblemDetail` のクラスで作る。標準の項目に `code` を足し、同じステータスの中の原因を見分けられるようにする（例: `{"title":"Not Found","status":404,"detail":"ユーザー 9 は登録されていません","code":"USER_NOT_FOUND"}`）
 - 確かめる順番は、POST が「ファイルの大きさ → ファイルの有無 → ユーザー ID → フレーズ ID → フォーマット（ffprobe でファイルの中身を見る）」、GET が「ユーザー ID → フレーズ ID → フォーマット（パスの `audio_format`）→ 録音の有無」。当てはまるもののうち最初のものを返す
 - コンテナの中では Spring Boot の既定の 8080 番で待ち受け、`compose.yaml` でホストの 80 番に割り当てる（5.1）。ホスト側の番号は、割り当てを変えるだけで変えられる
@@ -101,7 +101,7 @@ sequenceDiagram
     U->>DB: userExists, phraseExists
     U->>FS: allocate new file
     U->>FF: toStorageFormat into new file
-    alt not m4a or conversion fails
+    alt not m4a, too large, or conversion fails
         U->>FS: delete new file
         U-->>C: Rejected or exception
     else converted
@@ -143,7 +143,7 @@ sequenceDiagram
 | Condition | Response | Requirements |
 |-----------|----------|--------------|
 | `audio_file` がない、空、multipart ではない | 400、`MISSING_AUDIO_FILE` | 1.4 |
-| ファイルが 10MB を超える | 413、`AUDIO_FILE_TOO_LARGE` | 1.6 |
+| ファイルが 10MB を超える、または変換後の WAV が 200MB を超える | 413、`AUDIO_FILE_TOO_LARGE` | 1.6 |
 | ffprobe で MP4 のコンテナと AAC の音声を確かめられない | 415、`UNSUPPORTED_AUDIO` | 1.5 |
 | ユーザー ID が登録されていない、形式が正しくない | 404、`USER_NOT_FOUND` | 3.2 |
 | フレーズ ID が登録されていない、形式が正しくない | 404、`PHRASE_NOT_FOUND` | 3.3 |
@@ -151,7 +151,7 @@ sequenceDiagram
 | 組に録音がない | 404、`RECORDING_NOT_FOUND` | 2.2 |
 | 変換、ディスク、DB の失敗、ffmpeg のタイムアウト | 500、`INTERNAL_ERROR`。原因はログにだけ書く | 1.7、2.4 |
 
-- 業務の結果（400 の `UNSUPPORTED_FORMAT`、404、415）は、ユースケースが sealed の結果型で返す。外の世界の失敗は例外で上がり、`ErrorHandler` が 500 にする。400 の `MISSING_AUDIO_FILE` と 413 は、Spring の例外（`MissingServletRequestPartException`、`MaxUploadSizeExceededException`）を `ErrorHandler` で受けて返す。multipart ではない要求は Spring の既定では 500 になるので、`MultipartException` も `MISSING_AUDIO_FILE` にする
+- 業務の結果（400 の `UNSUPPORTED_FORMAT`、404、WAV の上限を超えたときの 413、415）は、ユースケースが sealed の結果型で返す。外の世界の失敗は例外で上がり、`ErrorHandler` が 500 にする。400 の `MISSING_AUDIO_FILE` と 413 は、Spring の例外（`MissingServletRequestPartException`、`MaxUploadSizeExceededException`）を `ErrorHandler` で受けて返す。multipart ではない要求は Spring の既定では 500 になるので、`MultipartException` も `MISSING_AUDIO_FILE` にする。空のファイル（0 バイト）は、`RecordingController` が `MultipartFile.isEmpty()` で確かめ、ユースケースを呼ばずに `MISSING_AUDIO_FILE` を返す
 
 ## Requirements Traceability
 
@@ -161,17 +161,17 @@ sequenceDiagram
 | 1.2 | 保存の成功を返す | RecordingController | AudioApiTest |
 | 1.3 | 既存の録音を置き換える | SaveRecordingUseCase、JooqRecordingRepository | SaveRecordingUseCaseTest、JooqRecordingRepositoryTest、AudioApiTest |
 | 1.4 | ファイルがないエラー | RecordingController、ErrorHandler | AudioApiTest |
-| 1.5 | 読めないファイルのエラー | FfmpegAudioConverter、SaveRecordingUseCase | SaveRecordingUseCaseTest、FfmpegAudioConverterTest、AudioApiTest |
-| 1.6 | 大きすぎるファイルのエラー | ErrorHandler、application.yml | AudioApiTest |
-| 1.7 | 失敗しても既存の録音を保つ | SaveRecordingUseCase、JooqRecordingRepository | SaveRecordingUseCaseTest |
+| 1.5 | 読めないファイルのエラー | FfmpegAudioConverter、SaveRecordingUseCase、ErrorHandler | SaveRecordingUseCaseTest、FfmpegAudioConverterTest、AudioApiTest |
+| 1.6 | 大きすぎるファイルのエラー | ErrorHandler、application.yml、FfmpegAudioConverter、SaveRecordingUseCase | SaveRecordingUseCaseTest、FfmpegAudioConverterTest、AudioApiTest |
+| 1.7 | 失敗しても既存の録音を保つ | SaveRecordingUseCase、JooqRecordingRepository、ErrorHandler | SaveRecordingUseCaseTest |
 | 2.1 | WAV を m4a にして返す | GetRecordingUseCase、FfmpegAudioConverter | GetRecordingUseCaseTest、FfmpegAudioConverterTest、AudioApiTest |
-| 2.2 | 録音がないエラー | GetRecordingUseCase | GetRecordingUseCaseTest |
-| 2.3 | 対応していないフォーマットのエラー | GetRecordingUseCase、AudioFormat | GetRecordingUseCaseTest、AudioApiTest |
+| 2.2 | 録音がないエラー | GetRecordingUseCase、ErrorHandler | GetRecordingUseCaseTest |
+| 2.3 | 対応していないフォーマットのエラー | GetRecordingUseCase、AudioFormat、ErrorHandler | GetRecordingUseCaseTest、AudioApiTest |
 | 2.4 | 読み出しや変換の失敗のエラー | GetRecordingUseCase、ErrorHandler | GetRecordingUseCaseTest |
 | 3.1 | 録音を扱う前に ID を確かめる | RecordingKeyResolver | SaveRecordingUseCaseTest、GetRecordingUseCaseTest |
-| 3.2 | ユーザーが見つからないエラー | RecordingKeyResolver、UserId | SaveRecordingUseCaseTest、GetRecordingUseCaseTest、AudioApiTest |
-| 3.3 | フレーズが見つからないエラー | RecordingKeyResolver、PhraseId | SaveRecordingUseCaseTest、GetRecordingUseCaseTest |
-| 4.1 | Dockerfile で起動できる | Dockerfile、compose.yaml | 手での確認 |
+| 3.2 | ユーザーが見つからないエラー | RecordingKeyResolver、UserId、ErrorHandler | SaveRecordingUseCaseTest、GetRecordingUseCaseTest、AudioApiTest |
+| 3.3 | フレーズが見つからないエラー | RecordingKeyResolver、PhraseId、ErrorHandler | SaveRecordingUseCaseTest、GetRecordingUseCaseTest |
+| 4.1 | Dockerfile で起動できる | Dockerfile、compose.yaml、AudioStorageApplication | 手での確認 |
 | 4.2 | 初期データが入った状態で受け付ける | `db/seed`、AudioStorageApplication | AudioApiTest、手での確認 |
 | 5.1 | ポートなしの `http://localhost/` で受け付ける | compose.yaml | 手での確認 |
 | 5.2 | `audio_file` のフィールドで受け取る | RecordingController | AudioApiTest |
@@ -181,9 +181,9 @@ sequenceDiagram
 ## Testing Strategy
 
 - **単体（application、フェイク）**: 業務の分岐を網羅する
-  - 保存: 新規と置き換えで結果が分かれ、置き換えでは古いファイルが消える（1.1〜1.3）。m4a でなければ新しいファイルを消して拒む（1.5）。変換と DB の切り替えのそれぞれで失敗させ、DB のパスが変わらず、新しいファイルが残らない（1.7）。取得: 録音がない、フォーマットが違う、変換が失敗する（2.1〜2.4）。共通: 形式の正しくない ID（`abc`、`0`、`Long` を超える数）と登録されていない ID が、どちらも見つからない扱いになり、変換と保存のポートが呼ばれない（3.1〜3.3）
-- **結合（adapter、本物）**: リポジトリは、一時的な SQLite に Flyway を流し、`replacePath` が古いパスを返して1行を保つ（1.3、5.4）。ストレージは、`allocate` が毎回違うパスを返し、`delete` がファイルがなくても失敗しない（5.3）。変換は、実機の m4a（iPhone のボイスメモで既定の圧縮のまま録ったものを人が用意する。「ロスレス」は ALAC になり拒まれる）がサンプリングレートとチャンネル数を保った WAV になり（1.1）、戻した m4a を ffprobe が AAC と読み（2.1）、テキスト、WAV、MP3、ALAC の m4a、途中で切れた m4a を拒む（1.5）
-- **全体（bootstrap）**: `AudioApiTest` で Spring Boot を起動し、課題の `curl` と同じ要求を送る。保存して取得できる、置き換えで 204 になる、初期データの ID で受け付ける、400・404・413・415 の代表を1つずつ確かめる。**手での確認**e を作る PR と提出の前に、`docker compose up --build` で起動して課題の `curl` を流す（4.1、4.2、5.1）
+  - 保存: 新規と置き換えで結果が分かれ、置き換えでは古いファイルが消える（1.1〜1.3）。m4a でなければ、または変換後の WAV が上限を超えれば、新しいファイルを消して拒む（1.5、1.6）。変換と DB の切り替えのそれぞれで失敗させ、DB のパスが変わらず、新しいファイルが残らない（1.7）。取得: 録音がない、フォーマットが違う、変換が失敗する（2.1〜2.4）。共通: 形式の正しくない ID（`abc`、`0`、`Long` を超える数）と登録されていない ID が、どちらも見つからない扱いになり、変換と保存のポートが呼ばれない（3.1〜3.3）
+- **結合（adapter、本物）**: リポジトリは、一時的な SQLite に Flyway を流し、`replacePath` が古いパスを返して1行を保つ（1.3、5.4）。ストレージは、`allocate` が毎回違うパスを返し、`delete` がファイルがなくても失敗しない（5.3）。変換は、実機の m4a（iPhone のボイスメモで既定の圧縮のまま録ったものを人が用意する。「ロスレス」は ALAC になり拒まれる）がサンプリングレートとチャンネル数を保った WAV になり（1.1）、戻した m4a を ffprobe が AAC と読み（2.1）、テキスト、WAV、MP3、ALAC の m4a、途中で切れた m4a を拒み（1.5）、WAV の上限を小さく設定すると上限を超えた変換を `TooLarge` にする（1.6）
+- **全体（bootstrap）**: `AudioApiTest` で Spring Boot を起動し、課題の `curl` と同じ要求を送る。保存して取得できる、置き換えで 204 になる、初期データの ID で受け付ける、400・404・413・415 の代表を1つずつ確かめる。**手での確認**: Dockerfile を作る PR と提出の前に、`docker compose up --build` で起動して課題の `curl` を流す（4.1、4.2、5.1）
 
 ## Related ADRs
 
@@ -201,19 +201,19 @@ sequenceDiagram
 | RecordingPath | domain | 保存先のルートからの相対パス | 5.3、5.4 | なし |
 | AudioFormat | domain | 送受信用のフォーマット（`M4A` だけ）と、パスの文字列からの読み取り | 2.3 | なし |
 | RecordingKeyResolver | application | 生の ID を確かめ、`RecordingKey` か `RecordingError` を返す | 3.1〜3.3 | RecordingRepository（P0） |
-| SaveRecordingUseCase | application | 保存の手順。`save(userId: String, phraseId: String, audio: InputStream): SaveRecordingResult` | 1.1、1.3、1.5、1.7 | RecordingKeyResolver、3つのポート（P0） |
+| SaveRecordingUseCase | application | 保存の手順。`save(userId: String, phraseId: String, audio: InputStream): SaveRecordingResult` | 1.1、1.3、1.5〜1.7 | RecordingKeyResolver、3つのポート（P0） |
 | GetRecordingUseCase | application | 取得の手順。`get(userId: String, phraseId: String, format: String): GetRecordingResult` | 2.1〜2.4 | RecordingKeyResolver、3つのポート（P0） |
 | RecordingController | web | HTTP の要求を受けてユースケースを呼び、結果をステータスと本文にする | 1.2、1.4、5.2 | 2つのユースケース（P0） |
 | ErrorHandler | web | `RecordingError` と例外を、エラーの JSON（`ProblemDetail`）にする | 1.4〜1.7、2.2〜2.4、3.2、3.3 | Spring MVC（P0） |
-| AudioStorageApplication | bootstrap | Spring Boot を起動する | 4.1 | すべてのモジュール（P0） |
+| AudioStorageApplication | bootstrap | Spring Boot を起動する | 4.1、4.2 | すべてのモジュール（P0） |
 | AdapterConfiguration | bootstrap | 設定値と jOOQ の `DSLContext` を渡して、3つのアダプタを Bean にする | 4.1 | adapter（P0） |
-| AudioStorageProperties | bootstrap | 保存先のルート、ffmpeg と ffprobe のパス、タイムアウトの設定値 | 4.1 | なし |
+| AudioStorageProperties | bootstrap | 保存先のルート、ffmpeg と ffprobe のパス、タイムアウト、WAV の上限の設定値 | 4.1 | なし |
 
 ### 結果の型（application）
 
 ```kotlin
 enum class RecordingError {
-    USER_NOT_FOUND, PHRASE_NOT_FOUND, UNSUPPORTED_AUDIO, UNSUPPORTED_FORMAT, RECORDING_NOT_FOUND,
+    USER_NOT_FOUND, PHRASE_NOT_FOUND, UNSUPPORTED_AUDIO, AUDIO_TOO_LARGE, UNSUPPORTED_FORMAT, RECORDING_NOT_FOUND,
 }
 
 sealed interface SaveRecordingResult {
@@ -251,7 +251,7 @@ interface RecordingStorage {
 }
 
 interface AudioConverter {
-    // m4a（MP4 のコンテナと AAC）でなければ Rejected。変換の失敗は AudioConversionException
+    // m4a（MP4 のコンテナと AAC）でなければ Rejected、変換後の WAV が上限を超えれば TooLarge。変換の失敗は AudioConversionException
     fun toStorageFormat(input: InputStream, output: Path): StorageConversion
 
     // 変換の失敗は AudioConversionException
@@ -261,6 +261,7 @@ interface AudioConverter {
 sealed interface StorageConversion {
     data object Converted : StorageConversion
     data object Rejected : StorageConversion
+    data object TooLarge : StorageConversion
 }
 ```
 
@@ -276,6 +277,7 @@ sealed interface StorageConversion {
   - 入力を一時ファイルに書き、ffprobe と ffmpeg を `ProcessBuilder` で起動する（ADR-0013）
   - ffprobe で、最初の音声のストリームが AAC であることを確かめ、それだけを変換する
   - 入力の形式を `-f mov` で固定し、プレイリストのような外部を読みにいく形式を受け付けない
+  - WAV への変換では、ffmpeg の `-fs` で出力の大きさに上限（設定値、200MB）を付け、上限に達したら `TooLarge` を返す
   - 1回の起動に 30 秒のタイムアウトを設ける。一時ファイルは変換の中で消す
 
 ## File Structure Plan
