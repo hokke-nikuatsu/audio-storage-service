@@ -66,5 +66,5 @@ AI は approve もマージもしない。
 | ブランチ名の書式と長さ | branch-name（`lefthook.yml` の `pre-push`） |
 | シークレットの混入 | gitleaks（`lefthook.yml` の `pre-push`） |
 | シェルスクリプトの書き方 | shellcheck（`lefthook.yml` の `pre-push`） |
-| ADR の一覧の表が各 ADR から作ったものと同じか、ADR どうしの amends と amended by の対応、`lefthook.yml` のジョブとこの表の対応 | doc-consistency（`lefthook.yml` の `pre-push`） |
+| ADR の一覧の表が各 ADR から作ったものと同じか、ADR の H1 の番号と status の値、ADR どうしの amends と amended by の対応、`lefthook.yml` のジョブとこの表の対応 | doc-consistency（`lefthook.yml` の `pre-push`） |
 | ドキュメントの中のリンク切れとアンカー切れ | doc-links（`lefthook.yml` の `pre-push`） |
