@@ -30,12 +30,20 @@
 - 書き方は ktlint で、質（関数の長さ、分岐の複雑さ、命名規則など）は detekt 2.0 で確かめる。どちらも Gradle のプラグインとしてバージョンを固定する
 - Kotlin のコンパイラの警告はエラーにする（`allWarningsAsErrors`）
 
+### Testing
+
+- application はポートに手で書いたフェイクを渡す単体テストで、業務の分岐を網羅する。モックのライブラリは使わない
+- adapter は本物（一時的な SQLite のファイルに Flyway を流したもの、ffmpeg、一時ディレクトリ）で結合テストをする
+- Spring Boot を丸ごと起動して HTTP を送るテストは少しだけ書く
+- Docker のイメージでの動作はテストにせず、課題の `curl` の手順を手で流して確かめる
+
 ## Development Environment
 
 ### Required Tools
 
 - ビルドは Gradle 9 系の Kotlin DSL（`build.gradle.kts`）で書き、Gradle Wrapper で実行する
 - JDK のバージョンは Gradle の toolchain で `build.gradle.kts` に書き、手元に入れずに Gradle に取ってこさせる。mise では管理しない
+- テストを走らせるホストには ffmpeg を入れる（手元は各自、CI は `apt`）。見つからなければテストを飛ばさずに落とす
 
 ## Key Technical Decisions
 
@@ -52,3 +60,4 @@
 - データベースへのアクセス: [ADR-0016](../../docs/adr/0016-access-database-with-jooq.md)
 - マイグレーションと初期データ: [ADR-0017](../../docs/adr/0017-migrate-schema-with-flyway.md)
 - 実行環境: [ADR-0018](../../docs/adr/0018-build-and-run-in-single-container.md)
+- テスト戦略: [ADR-0019](../../docs/adr/0019-test-each-layer-for-its-own-concern.md)
