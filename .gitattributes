@@ -7,3 +7,6 @@
 .claude/skills/kiro-spec-design/rules/design-principles.md -linguist-generated
 .claude/skills/kiro-spec-design/rules/design-review-gate.md -linguist-generated
 .claude/skills/kiro-impl/SKILL.md -linguist-generated
+.kiro/settings/templates/specs/requirements.md -linguist-generated
+.claude/skills/kiro-spec-requirements/rules/ears-format.md -linguist-generated
+.claude/skills/kiro-spec-requirements/rules/requirements-review-gate.md -linguist-generated
