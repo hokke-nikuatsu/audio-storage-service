@@ -4,9 +4,13 @@
 - ADR の一覧の表と、各 ADR の front matter・H1
 - ADR どうしの番号と status、amends と amended by の対応
 - lefthook.yml の pre-push のジョブと、レビューの指摘しない範囲の表
+
+YAML は yq で読む。
 """
 
+import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -29,6 +33,15 @@ def error(message: str, basis: str) -> None:
     errors.append(f"エラー: {message}。根拠: {basis}")
 
 
+def yaml(path: Path, basis: str, *options: str) -> dict:
+    """YAML を yq で読む。YAML として壊れていればエラーにして、空として扱う。"""
+    result = subprocess.run(["yq", *options, "-o=json", str(path)], capture_output=True, text=True)
+    if result.returncode != 0:
+        error(f"{path.relative_to(ROOT)} を YAML として読めない（{result.stderr.strip()}）", basis)
+        return {}
+    return json.loads(result.stdout) or {}
+
+
 def table_rows(text: str) -> list[list[str]]:
     """Markdown の表の本文の行を、セルのリストにする。見出しと区切りの行は除く。"""
     rows: list[list[str]] = []
@@ -41,14 +54,8 @@ def table_rows(text: str) -> list[list[str]]:
 
 
 def read_adr(path: Path) -> dict[str, str]:
-    text = path.read_text(encoding="utf-8")
-    meta: dict[str, str] = {}
-    front = re.match(r"---\n(.*?)\n---\n", text, re.DOTALL)
-    if front:
-        for line in front.group(1).splitlines():
-            key, _, value = line.partition(":")
-            meta[key.strip()] = value.strip()
-    h1 = re.search(r"^# ADR-(\d{4}): (.+)$", text, re.MULTILINE)
+    meta = {key: str(value) for key, value in yaml(path, "docs/adr/template.md", "--front-matter=extract").items()}
+    h1 = re.search(r"^# ADR-(\d{4}): (.+)$", path.read_text(encoding="utf-8"), re.MULTILINE)
     meta["h1_number"], meta["title"] = h1.groups() if h1 else ("", "")
     return meta
 
@@ -109,18 +116,22 @@ def check_adrs() -> None:
 
 
 def check_review_exclusions() -> None:
-    lefthook = LEFTHOOK.read_text(encoding="utf-8")
-    pre_push = re.search(r"^pre-push:\n((?:[ \n].*\n?)*)", lefthook, re.MULTILINE)
-    jobs = set(re.findall(r"^\s+- name: (\S+)$", pre_push.group(1), re.MULTILINE)) if pre_push else set()
+    jobs = yaml(LEFTHOOK, "docs/conventions/checks.md").get("pre-push", {}).get("jobs", [])
+    names = set()
+    for job in jobs:
+        if "name" in job:
+            names.add(job["name"])
+        else:
+            error(f"lefthook.yml の pre-push に name のないジョブ（{job.get('run', '')}）がある", "docs/conventions/review.md の「指摘しない範囲」")
     rows = set()
     for row in table_rows(REVIEW.read_text(encoding="utf-8")):
         match = LEFTHOOK_ROW.fullmatch(row[-1])
         if match:
             rows.add(match.group(1))
-    for job in sorted(jobs - rows):
-        error(f"lefthook.yml の pre-push のジョブ {job} が、レビューの指摘しない範囲の表にない", "docs/conventions/review.md の「指摘しない範囲」")
-    for job in sorted(rows - jobs):
-        error(f"レビューの指摘しない範囲の表にある {job} が、lefthook.yml の pre-push のジョブにない", "docs/conventions/review.md の「指摘しない範囲」")
+    for name in sorted(names - rows):
+        error(f"lefthook.yml の pre-push のジョブ {name} が、レビューの指摘しない範囲の表にない", "docs/conventions/review.md の「指摘しない範囲」")
+    for name in sorted(rows - names):
+        error(f"レビューの指摘しない範囲の表にある {name} が、lefthook.yml の pre-push のジョブにない", "docs/conventions/review.md の「指摘しない範囲」")
 
 
 def main() -> int:
