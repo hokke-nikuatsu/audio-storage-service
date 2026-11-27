@@ -2,8 +2,8 @@
 
 大きなタスク（1〜10）を、それぞれ1つのブランチと1つの PR にする。小さなタスク（1.1 など）は、`/kiro-impl` が1つずつ実装してコミットする単位。
 
-- [ ] 1. Gradle の骨組みと、ビルドで行うチェック
-- [ ] 1.1 5つのモジュールと共通のビルドの設定を作る
+- [x] 1. Gradle の骨組みと、ビルドで行うチェック
+- [x] 1.1 5つのモジュールと共通のビルドの設定を作る
   - `domain`、`application`、`adapter`、`web`、`bootstrap` の5つのモジュールと、共通の設定をまとめる `build-logic` を作る
   - 共通の設定に、Kotlin 2.3 系、Java 25 の toolchain、コンパイラの警告をエラーにする設定、ktlint、detekt 2.0、Kotest を入れる。ライブラリとプラグインのバージョンは1か所にまとめる
   - JDK を手元に入れずに Gradle に取ってこさせるため、toolchain の取得の設定（foojay の resolver）を入れる。detekt の設定は、既定との差分だけを書く
@@ -12,12 +12,12 @@
   - `bootstrap` に Spring Boot の起動のクラスを置き、Spring のコンテキストが起動するだけのテストを1本書く。これで、Kotest と detekt 2.0 が Kotlin 2.3 と Spring Boot 4.1 で動くかを確かめる。動かなければ ADR-0009、ADR-0020 の見直し条件に従い、人に判断を仰ぐ
   - 完了の状態: `./gradlew build` が、5つのモジュールすべてで ktlint・detekt・テストを走らせ、Spring のコンテキストが起動するテストを含めて成功する
   - _Requirements: 4.1_
-- [ ] 1.2 モジュールの依存の向きを、ビルドで強制する
+- [x] 1.2 モジュールの依存の向きを、ビルドで強制する
   - 依存してよいモジュールの表を `build-logic` に1か所だけ書き、表にない依存（テストの依存を含む）を宣言したらビルドを失敗させる
   - 依存は `implementation` で宣言し、`api` は `application` から `domain` への依存だけに使う
   - 完了の状態: 表にない依存（たとえば `application` から `adapter`）を足すとビルドが失敗し、表のとおりなら成功する
   - _Requirements: 4.1_
-- [ ] 1.3 プッシュの前と CI のチェックに、Gradle のチェックを加える
+- [x] 1.3 プッシュの前と CI のチェックに、Gradle のチェックを加える
   - lefthook のプッシュの前のチェックに、Gradle の ktlint・detekt・テストを加え、チェックの規約に書き足す
   - CI のジョブで、Gradle のキャッシュ（`gradle/actions/setup-gradle` など）と ffmpeg を用意し、同じチェックを走らせる。JDK の取得と依存の取得が入るので、ジョブのタイムアウトを見直す
   - 完了の状態: `lefthook run pre-push` が Gradle のチェックを含んで成功し、PR の CI でも同じチェックが走って成功する

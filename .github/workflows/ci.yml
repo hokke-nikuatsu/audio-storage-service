@@ -13,7 +13,8 @@ concurrency:
 jobs:
   checks:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # Gradle の check で、JDK は毎回、依存は初回やキャッシュが切れたときに取得が入る
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -21,6 +22,17 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - uses: jdx/mise-action@924e7c586e33d7d4bae9c14e26c5d22e2beb6e78 # v5.3.0
+      # Gradle 本体と依存をキャッシュに読み書きする。toolchain の JDK は basic ではキャッシュされず、毎回 Gradle が取ってくる。
+      # Gradle は、ランナーに入っている JDK で動かす
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+        with:
+          # 既定の enhanced は独自のライセンスで利用規約への同意が要るので、オープンソースの実装を使う
+          cache-provider: basic
+          # 既定では main 以外で読むだけになり、PR だけで動くこの CI では一度も書かれない。
+          # 書いたキャッシュは PR ごとに分かれ、同じ PR の次のプッシュや再実行で使われる
+          cache-read-only: false
+      # adapter のテストが ffmpeg を使う。見つからなければテストを飛ばさずに落とす（.kiro/steering/tech.md）
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
       - run: lefthook run pre-push --no-auto-install --no-tty
 
   # main のルールセットはこのジョブだけを必須にする。ジョブを足したら needs に加える（docs/conventions/checks.md）
