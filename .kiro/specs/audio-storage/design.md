@@ -151,7 +151,7 @@ sequenceDiagram
 | 組に録音がない | 404、`RECORDING_NOT_FOUND` | 2.2 |
 | 変換、ディスク、DB の失敗、ffmpeg のタイムアウト | 500、`INTERNAL_ERROR`。原因はログにだけ書く | 1.7、2.4 |
 
-- 業務の結果（400 の `UNSUPPORTED_FORMAT`、404、WAV の上限を超えたときの 413、415）は、ユースケースが sealed の結果型で返す。外の世界の失敗は例外で上がり、`ErrorHandler` が 500 にする。400 の `MISSING_AUDIO_FILE` と 413 は、Spring の例外（`MissingServletRequestPartException`、`MaxUploadSizeExceededException`）を `ErrorHandler` で受けて返す。multipart ではない要求は Spring の既定では 500 になるので、`MultipartException` も `MISSING_AUDIO_FILE` にする。空のファイル（0 バイト）は、`RecordingController` が `MultipartFile.isEmpty()` で確かめ、ユースケースを呼ばずに `MISSING_AUDIO_FILE` を返す
+- 業務の結果（400 の `UNSUPPORTED_FORMAT`、404、WAV の上限を超えたときの 413、415）は、ユースケースが sealed の結果型で返す。外の世界の失敗は例外で上がり、`ErrorHandler` が 500 にする。400 の `MISSING_AUDIO_FILE` と 413 は、Spring の例外（`MissingServletRequestPartException`、`MaxUploadSizeExceededException`）を `ErrorHandler` で受けて返す。multipart ではない要求は Spring の既定では 500 になるので、`MultipartException` も `MISSING_AUDIO_FILE` にする。空のファイル（0 バイト）は、`RecordingController` が `MultipartFile.isEmpty()` で確かめ、ユースケースを呼ばずに `MissingServletRequestPartException` を投げ、ほかの `MISSING_AUDIO_FILE` と同じく `ErrorHandler` に返させる。エラーの JSON は `ErrorHandler` だけが作る
 
 ## Requirements Traceability
 
@@ -183,7 +183,7 @@ sequenceDiagram
 - **単体（application、フェイク）**: 業務の分岐を網羅する
   - 保存: 新規と置き換えで結果が分かれ、置き換えでは古いファイルが消える（1.1〜1.3）。m4a でなければ、または変換後の WAV が上限を超えれば、新しいファイルを消して拒む（1.5、1.6）。変換と DB の切り替えのそれぞれで失敗させ、DB のパスが変わらず、新しいファイルが残らない（1.7）。取得: 録音がない、フォーマットが違う、変換が失敗する（2.1〜2.4）。共通: 形式の正しくない ID（`abc`、`0`、`Long` を超える数）と登録されていない ID が、どちらも見つからない扱いになり、変換と保存のポートが呼ばれない（3.1〜3.3）
 - **結合（adapter、本物）**: リポジトリは、一時的な SQLite に Flyway を流し、`replacePath` が古いパスを返して1行を保つ（1.3、5.4）。ストレージは、`allocate` が毎回違うパスを返し、`delete` がファイルがなくても失敗しない（5.3）。変換は、実機の m4a（iPhone のボイスメモで既定の圧縮のまま録ったものを人が用意する。「ロスレス」は ALAC になり拒まれる）がサンプリングレートとチャンネル数を保った WAV になり（1.1）、戻した m4a を ffprobe が AAC と読み（2.1）、テキスト、WAV、MP3、ALAC の m4a、途中で切れた m4a を拒み（1.5）、WAV の上限を小さく設定すると上限を超えた変換を `TooLarge` にする（1.6）
-- **全体（bootstrap）**: `AudioApiTest` で Spring Boot を起動し、課題の `curl` と同じ要求を送る。保存して取得できる、置き換えで 204 になる、初期データの ID で受け付ける、400・404・413・415 の代表を1つずつ確かめる。**手での確認**: Dockerfile を作る PR と提出の前に、`docker compose up --build` で起動して課題の `curl` を流す（4.1、4.2、5.1）
+- **全体（bootstrap）**: `AudioApiTest` で Spring Boot を起動し、課題の `curl` と同じ要求を送る。保存して取得できる、置き換えで 204 になる、初期データの ID で受け付ける、空のファイルが 400 になる、404・413・415 の代表を1つずつ確かめる。**手での確認**: Dockerfile を作る PR と提出の前に、`docker compose up --build` で起動して課題の `curl` を流す（4.1、4.2、5.1）
 
 ## Related ADRs
 
@@ -213,7 +213,7 @@ sequenceDiagram
 
 ```kotlin
 enum class RecordingError {
-    USER_NOT_FOUND, PHRASE_NOT_FOUND, UNSUPPORTED_AUDIO, AUDIO_TOO_LARGE, UNSUPPORTED_FORMAT, RECORDING_NOT_FOUND,
+    USER_NOT_FOUND, PHRASE_NOT_FOUND, UNSUPPORTED_AUDIO, AUDIO_FILE_TOO_LARGE, UNSUPPORTED_FORMAT, RECORDING_NOT_FOUND,
 }
 
 sealed interface SaveRecordingResult {
