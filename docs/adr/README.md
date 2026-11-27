@@ -19,4 +19,5 @@
 | [0004](0004-human-approves-requirements-design-and-tasks.md) | cc-sdd の spec は、要件・設計・タスクの3つを人が承認する | accepted | 2026-11-23 |
 | [0005](0005-run-same-checks-locally-and-in-ci.md) | チェックは手元のフックと CI で同じコマンドを走らせ、CI の結果を1つのジョブにまとめる | accepted | 2026-11-26 |
 | [0006](0006-override-cc-sdd-skills-only-where-they-conflict.md) | cc-sdd の SKILL.md は、リポジトリの規約と直接ぶつかる箇所に限り1行単位で書き換える | accepted | 2026-11-27 |
+| [0007](0007-use-kotlin-and-spring-boot-mvc.md) | サービスは Kotlin と Spring Boot で作り、リクエストは Spring MVC で処理する | accepted | 2026-11-27 |
 <!-- adr-index:end -->
