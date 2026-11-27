@@ -4,7 +4,8 @@
 **Purpose**: A design that a human reviewer can read top to bottom in one sitting, and that an implementer can follow without interpretation drift.
 
 **Rules**:
-- Target 200 lines or fewer for the whole document. MUST NOT exceed 250 lines; if it would, simplify the design or split the spec.
+- The line limit applies only to the part above the `# Implementation References` heading, which a human reviews: target 150 lines or fewer, MUST NOT exceed 200 lines; if it would, simplify the design or split the spec.
+- The implementation references below that heading have no line limit. Keep them readable: one component per table row, one file per line in the File Structure Plan.
 - Do not restate steering or ADRs. Technology choices live in `.kiro/steering/tech.md` and `docs/adr/`; reference them as `ADR-NNNN`.
 - Keep the heading names below unchanged; write the body in the language set in `spec.json`.
 - Prefer tables and Mermaid diagrams over prose. Omit an optional section entirely instead of writing "N/A".
@@ -68,8 +69,8 @@
 ## Related ADRs
 <!-- Bullet list: ADR-NNNN — one-line reason it matters to this design. -->
 
----
-<!-- Implementation references below. Reviewers may skim. -->
+# Implementation References
+<!-- Keep this heading as is: it marks the end of the part a human reviews. Reviewers may skim below. Not counted in the line limit. -->
 
 ## Components and Interfaces
 <!-- Summary table first. Full blocks only for components that introduce a boundary (ports, adapters, persistence, external processes): responsibility, dependencies (Inbound/Outbound/External with P0-P2), and the interface signature. No implementation code. -->

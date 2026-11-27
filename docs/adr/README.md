@@ -14,7 +14,7 @@
 | 番号 | タイトル | 状態 | 日付 |
 |---|---|---|---|
 | [0001](0001-spec-driven-ai-development-with-human-judgment.md) | cc-sdd による仕様駆動で、AI が実装・レビューし、人が判断する開発プロセスにする | amended by ADR-0004 | 2026-11-23 |
-| [0002](0002-tune-cc-sdd-for-human-readable-specs.md) | cc-sdd はテンプレートを主にチューニングし、design.md を人が読める長さと構成に保つ | amended by ADR-0004, ADR-0006 | 2026-11-23 |
+| [0002](0002-tune-cc-sdd-for-human-readable-specs.md) | cc-sdd はテンプレートを主にチューニングし、design.md を人が読める長さと構成に保つ | amended by ADR-0004, ADR-0006, ADR-0021 | 2026-11-23 |
 | [0003](0003-separate-entry-points-from-conventions.md) | 入口のファイルは案内だけにし、規約は作業の進め方とコードで置き場を分ける | accepted | 2026-11-23 |
 | [0004](0004-human-approves-requirements-design-and-tasks.md) | cc-sdd の spec は、要件・設計・タスクの3つを人が承認する | accepted | 2026-11-23 |
 | [0005](0005-run-same-checks-locally-and-in-ci.md) | チェックは手元のフックと CI で同じコマンドを走らせ、CI の結果を1つのジョブにまとめる | accepted | 2026-11-26 |
@@ -33,4 +33,5 @@
 | [0018](0018-build-and-run-in-single-container.md) | Dockerfile の中でビルドし、Ubuntu ベースの1つのコンテナで動かす | accepted | 2026-11-27 |
 | [0019](0019-test-each-layer-for-its-own-concern.md) | テストは層ごとに確かめることを分け、業務の分岐はフェイクで、外の世界は本物で確かめる | accepted | 2026-11-27 |
 | [0020](0020-write-tests-with-kotest.md) | テストは Kotest で書く | accepted | 2026-11-27 |
+| [0021](0021-limit-only-review-part-of-design.md) | design.md の行数の上限は、人がレビューする前半だけに掛ける | accepted | 2026-11-27 |
 <!-- adr-index:end -->
