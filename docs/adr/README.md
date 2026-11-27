@@ -22,4 +22,5 @@
 | [0007](0007-use-kotlin-and-spring-boot-mvc.md) | サービスは Kotlin と Spring Boot で作り、リクエストは Spring MVC で処理する | accepted | 2026-11-27 |
 | [0008](0008-build-with-gradle-and-pin-jdk-by-toolchain.md) | ビルドは Gradle の Kotlin DSL で書き、JDK は Gradle の toolchain で固定する | accepted | 2026-11-27 |
 | [0009](0009-check-kotlin-with-ktlint-and-detekt.md) | Kotlin のコードは ktlint と detekt 2.0 で確かめ、コンパイラの警告をエラーにする | accepted | 2026-11-27 |
+| [0010](0010-separate-core-from-io-by-ports-and-adapters.md) | 業務の手順と外の世界をポートとアダプタで分ける | accepted | 2026-11-27 |
 <!-- adr-index:end -->
