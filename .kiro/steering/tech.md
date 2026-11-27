@@ -27,3 +27,4 @@
 - 言語とフレームワーク: [ADR-0007](../../docs/adr/0007-use-kotlin-and-spring-boot-mvc.md)
 - ビルドツールと JDK の固定: [ADR-0008](../../docs/adr/0008-build-with-gradle-and-pin-jdk-by-toolchain.md)
 - 静的解析: [ADR-0009](../../docs/adr/0009-check-kotlin-with-ktlint-and-detekt.md)
+- アーキテクチャとモジュールの分け方: `structure.md`
