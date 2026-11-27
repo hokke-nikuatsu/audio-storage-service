@@ -17,6 +17,7 @@ pre-push:
       run: mise exec -- python3 scripts/checks/doc_line_count.py
     - name: doc-links
       run: git ls-files -z '*.md' | xargs -0 mise exec -- lychee --offline --include-fragments --no-progress
+      fail_text: "直し方: docs/conventions/checks.md の「既存のツールが失敗したとき」"
     - name: gitleaks
       run: mise exec -- gitleaks git --redact --verbose --no-banner
       fail_text: "直し方: docs/conventions/checks.md の「既存のツールが失敗したとき」"
