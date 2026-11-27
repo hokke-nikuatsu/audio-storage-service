@@ -11,6 +11,7 @@
 - **送受信用**: m4a（MP4 のコンテナに AAC）。POST で受け付け、GET の `{audio_format}` で指定できるのは `m4a` だけ
 - **保存用**: WAV（PCM 16 ビット）。サンプリングレートとチャンネル数は元の録音のまま保つ
 - **変換**: ffmpeg のコマンドを `ProcessBuilder` で起動し、一時ファイルで受け渡す。変換の前に ffprobe で、コンテナが MP4、コーデックが AAC であることを確かめる
+- **保存先**: 録音は `{user_id}/{phrase_id}/{UUID}.wav` に保存のたびに一意な名前で書く。置き換えは「新しいファイルを書く → DB のパスを切り替える → 古いファイルを消す」の順に行い、DB の切り替えが失敗したら新しいファイルを消す。DB には、設定で持つルートのディレクトリからの相対パスを書く
 
 ## Development Standards
 
@@ -36,3 +37,4 @@
 - アーキテクチャとモジュールの分け方: `structure.md`
 - 音声フォーマット: [ADR-0012](../../docs/adr/0012-transfer-m4a-and-store-wav.md)
 - 音声の変換: [ADR-0013](../../docs/adr/0013-convert-audio-by-running-ffmpeg.md)
+- 録音のファイルの名前と置き換えの順番: [ADR-0014](../../docs/adr/0014-name-each-saved-file-uniquely.md)

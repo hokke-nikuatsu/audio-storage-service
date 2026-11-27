@@ -26,4 +26,5 @@
 | [0011](0011-enforce-layer-dependencies-with-gradle-modules.md) | 層の依存の向きは、層ごとの Gradle のモジュールで強制する | accepted | 2026-11-27 |
 | [0012](0012-transfer-m4a-and-store-wav.md) | 送受信は m4a（AAC）、保存は WAV（PCM 16 ビット）にする | accepted | 2026-11-27 |
 | [0013](0013-convert-audio-by-running-ffmpeg.md) | 音声の変換は ffmpeg のコマンドを直接起動して行い、形式は ffprobe で確かめる | accepted | 2026-11-27 |
+| [0014](0014-name-each-saved-file-uniquely.md) | 録音のファイルは保存のたびに一意な名前で書き、DB を切り替えてから古いファイルを消す | accepted | 2026-11-27 |
 <!-- adr-index:end -->
