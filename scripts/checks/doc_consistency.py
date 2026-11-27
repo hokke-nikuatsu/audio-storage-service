@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """2か所に書いている情報が食い違っていないかを確かめる。
 
-- ADR の一覧の表と、各 ADR の front matter・H1
+- ADR の一覧の表が、各 ADR の front matter・H1 から作ったものと同じか
 - ADR どうしの番号と status、amends と amended by の対応
 - lefthook.yml の pre-push のジョブと、レビューの指摘しない範囲の表
 
+--fix を付けると、ADR の一覧の表を各 ADR から作り直す。
 YAML は yq で読む。
 """
 
@@ -25,6 +26,10 @@ ADR_REF = r"ADR-\d{4}"
 STATUS = re.compile(rf"proposed|accepted|deprecated|(superseded|amended) by {ADR_REF}(, {ADR_REF})*")
 # 指摘しない範囲の表で、lefthook のジョブを示す書き方
 LEFTHOOK_ROW = re.compile(r"^(\S+)（`lefthook\.yml` の `pre-push`）$")
+# ADR の一覧の表を囲む印。このあいだを --fix で作り直す
+INDEX_BEGIN = "<!-- adr-index:begin -->"
+INDEX_END = "<!-- adr-index:end -->"
+INDEX_FIX = "mise exec -- python3 scripts/checks/doc_consistency.py --fix"
 
 errors: list[str] = []
 
@@ -60,14 +65,17 @@ def read_adr(path: Path) -> dict[str, str]:
     return meta
 
 
-def check_adrs() -> None:
+def read_adrs() -> dict[str, dict[str, str]]:
     adrs = {}
     for path in sorted(ADR_DIR.glob("[0-9][0-9][0-9][0-9]-*.md")):
         number = path.name[:4]
         if number in adrs:
             error(f"ADR-{number} のファイルが複数ある", "docs/adr/README.md")
         adrs[number] = read_adr(path) | {"file": path.name}
+    return adrs
 
+
+def check_adrs(adrs: dict[str, dict[str, str]]) -> None:
     for number, adr in adrs.items():
         name = f"docs/adr/{adr['file']}"
         if adr["h1_number"] != number:
@@ -89,30 +97,27 @@ def check_adrs() -> None:
                 if number not in re.findall(r"\d{4}", adrs.get(ref, {}).get("amends", "")):
                     error(f"{name} は ADR-{ref} に amended by されているが、ADR-{ref} の amends に ADR-{number} がない", "docs/adr/README.md")
 
-    listed = set()
-    for row in table_rows(ADR_INDEX.read_text(encoding="utf-8")):
-        if len(row) != 4:
-            error(f"ADR の一覧の行（{row[0]}）の列の数が4つでない", "docs/adr/README.md")
-            continue
-        link = re.fullmatch(r"\[(\d{4})\]\((\d{4})-.+\.md\)", row[0])
-        if not link or link.group(1) != link.group(2):
-            error(f"ADR の一覧の行（{row[0]}）の番号がリンク先のファイル名と違う", "docs/adr/README.md")
-            continue
-        number = link.group(1)
-        listed.add(number)
-        adr = adrs.get(number)
-        if adr is None:
-            error(f"ADR の一覧にある ADR-{number} のファイルがない", "docs/adr/README.md")
-            continue
-        for label, actual, expected in [
-            ("タイトル", row[1], adr["title"]),
-            ("状態", row[2], adr.get("status", "")),
-            ("日付", row[3], adr.get("date", "")),
-        ]:
-            if actual != expected:
-                error(f"ADR の一覧の ADR-{number} の{label}（{actual}）が、ADR のファイル（{expected}）と違う", "docs/adr/README.md")
-    for number in sorted(adrs.keys() - listed):
-        error(f"ADR-{number} が ADR の一覧にない", "docs/adr/README.md")
+
+def index_table(adrs: dict[str, dict[str, str]]) -> str:
+    lines = ["| 番号 | タイトル | 状態 | 日付 |", "|---|---|---|---|"]
+    for number, adr in adrs.items():
+        lines.append(f"| [{number}]({adr['file']}) | {adr['title']} | {adr.get('status', '')} | {adr.get('date', '')} |")
+    return "\n".join(lines)
+
+
+def check_index(adrs: dict[str, dict[str, str]], fix: bool) -> None:
+    text = ADR_INDEX.read_text(encoding="utf-8")
+    parts = re.split(rf"(?<={re.escape(INDEX_BEGIN)}\n)(.*?)(?=\n{re.escape(INDEX_END)})", text, flags=re.DOTALL)
+    if len(parts) != 3:
+        error(f"ADR の一覧に、表を囲む {INDEX_BEGIN} と {INDEX_END} の行が1組ない", "docs/adr/README.md")
+        return
+    expected = index_table(adrs)
+    if parts[1] == expected:
+        return
+    if fix:
+        ADR_INDEX.write_text(parts[0] + expected + parts[2], encoding="utf-8")
+    else:
+        error(f"ADR の一覧の表が、各 ADR から作ったものと違う。`{INDEX_FIX}` で作り直す", "docs/adr/README.md")
 
 
 def check_review_exclusions() -> None:
@@ -135,7 +140,10 @@ def check_review_exclusions() -> None:
 
 
 def main() -> int:
-    check_adrs()
+    adrs = read_adrs()
+    check_adrs(adrs)
+    # ADR に誤りがあるうちは、誤った内容で一覧を作り直さない
+    check_index(adrs, fix="--fix" in sys.argv[1:] and not errors)
     check_review_exclusions()
     for message in errors:
         print(message)

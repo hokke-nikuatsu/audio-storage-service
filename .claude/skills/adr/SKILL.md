@@ -3,7 +3,7 @@ name: adr
 description: 会話で人が決めた技術的な判断を、docs/adr/ に次の番号の ADR として記録し、一覧を更新する。判断を変える場合は古い ADR を置き換え済み、または一部変更済みにする。
 disable-model-invocation: true
 argument-hint: "<判断の短い説明>"
-allowed-tools: Read, Write, Edit, Glob, Bash(ls:*), Bash(date:*)
+allowed-tools: Read, Write, Edit, Glob, Bash(ls:*), Bash(date:*), Bash(mise exec -- python3 scripts/checks/doc_consistency.py --fix)
 ---
 
 # ADR を記録する
@@ -31,7 +31,7 @@ allowed-tools: Read, Write, Edit, Glob, Bash(ls:*), Bash(date:*)
 5. 既存の ADR の判断を変える場合は、古い ADR の front matter の `status` だけを変える。古い ADR の本文は書き換えない
    - 判断を丸ごと変える: `superseded by ADR-NNNN`
    - 判断の一部だけを変える: `amended by ADR-NNNN`。新しい ADR の front matter に `amends: ADR-NNNN` を書き、決定に「どの判断を変え、ほかは有効なまま」かを書く
-6. `docs/adr/README.md` の表に1行足す。置き換えた・一部を変えた ADR があれば、その行の状態も更新する
+6. `mise exec -- python3 scripts/checks/doc_consistency.py --fix` で `docs/adr/README.md` の一覧の表を作り直す。表は手で書かない。エラーが出たら、ADR の front matter と H1 を直してから再び実行する
 7. 書いた ADR を人に見せ、`## 反映先` に挙げた規約・steering・spec への反映がまだなら、どこに何を書くかを提案する
 
 ## してはいけないこと
