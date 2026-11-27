@@ -14,7 +14,6 @@
 | 判断の理由 | [docs/adr/](../adr/README.md) | 1つの判断につき1ファイル | 判断の理由を確かめるとき |
 | AI の入口 | [AGENTS.md](../../AGENTS.md)、[CLAUDE.md](../../CLAUDE.md) | 言語、この規約の取り込み、Claude Code 固有の設定 | — |
 | 人の入口 | [README.md](../../README.md) | 概要、起動方法、この表へのリンク | — |
-| 作業の記録 | [docs/worklog.md](../worklog.md) | フェーズごとにかかった時間 | — |
 
 - 同じことを2か所に書かない
 - ADR の書き方と運用は [docs/adr/README.md](../adr/README.md) にある
