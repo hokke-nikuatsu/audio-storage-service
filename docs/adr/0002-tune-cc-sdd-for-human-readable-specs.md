@@ -1,5 +1,5 @@
 ---
-status: amended by ADR-0004, ADR-0006
+status: amended by ADR-0004, ADR-0006, ADR-0021
 date: 2026-11-23
 irreversibility: 低
 ---
