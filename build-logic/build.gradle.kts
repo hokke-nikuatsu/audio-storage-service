@@ -12,4 +12,11 @@ dependencies {
     implementation(plugin(libs.plugins.spring.boot))
     implementation(plugin(libs.plugins.detekt))
     implementation(plugin(libs.plugins.ktlint))
+
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotest.assertions.core)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

@@ -36,3 +36,5 @@ dependencies {
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
+
+checkModuleDependencies()

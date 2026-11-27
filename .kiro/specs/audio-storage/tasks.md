@@ -12,7 +12,7 @@
   - `bootstrap` に Spring Boot の起動のクラスを置き、Spring のコンテキストが起動するだけのテストを1本書く。これで、Kotest と detekt 2.0 が Kotlin 2.3 と Spring Boot 4.1 で動くかを確かめる。動かなければ ADR-0009、ADR-0020 の見直し条件に従い、人に判断を仰ぐ
   - 完了の状態: `./gradlew build` が、5つのモジュールすべてで ktlint・detekt・テストを走らせ、Spring のコンテキストが起動するテストを含めて成功する
   - _Requirements: 4.1_
-- [ ] 1.2 モジュールの依存の向きを、ビルドで強制する
+- [x] 1.2 モジュールの依存の向きを、ビルドで強制する
   - 依存してよいモジュールの表を `build-logic` に1か所だけ書き、表にない依存（テストの依存を含む）を宣言したらビルドを失敗させる
   - 依存は `implementation` で宣言し、`api` は `application` から `domain` への依存だけに使う
   - 完了の状態: 表にない依存（たとえば `application` から `adapter`）を足すとビルドが失敗し、表のとおりなら成功する
