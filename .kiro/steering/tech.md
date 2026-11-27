@@ -6,6 +6,11 @@
 - **Framework**: Spring Boot 4.1。リクエストは Spring MVC（ブロッキング）で処理し、WebFlux やコルーチンは使わない
 - **Runtime**: Java 25
 
+## Audio Formats
+
+- **送受信用**: m4a（MP4 のコンテナに AAC）。POST で受け付け、GET の `{audio_format}` で指定できるのは `m4a` だけ
+- **保存用**: WAV（PCM 16 ビット）。サンプリングレートとチャンネル数は元の録音のまま保つ
+
 ## Development Standards
 
 ### Code Quality
@@ -28,3 +33,4 @@
 - ビルドツールと JDK の固定: [ADR-0008](../../docs/adr/0008-build-with-gradle-and-pin-jdk-by-toolchain.md)
 - 静的解析: [ADR-0009](../../docs/adr/0009-check-kotlin-with-ktlint-and-detekt.md)
 - アーキテクチャとモジュールの分け方: `structure.md`
+- 音声フォーマット: [ADR-0012](../../docs/adr/0012-transfer-m4a-and-store-wav.md)
