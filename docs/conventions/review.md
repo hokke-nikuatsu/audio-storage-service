@@ -66,5 +66,6 @@ AI は approve もマージもしない。
 | ブランチ名の書式と長さ | branch-name（`lefthook.yml` の `pre-push`） |
 | シークレットの混入 | gitleaks（`lefthook.yml` の `pre-push`） |
 | シェルスクリプトの書き方 | shellcheck（`lefthook.yml` の `pre-push`） |
+| Kotlin のコードの書き方、detekt のルールで確かめる質、コンパイラの警告、テストの失敗、モジュールの依存の向き | gradle（`lefthook.yml` の `pre-push`） |
 | ADR と一覧の表の食い違い、`lefthook.yml` のジョブとこの表の食い違い。確かめていることの一覧は `scripts/checks/doc_consistency.py` の冒頭にある | doc-consistency（`lefthook.yml` の `pre-push`） |
 | ドキュメントの中のリンク切れとアンカー切れ | doc-links（`lefthook.yml` の `pre-push`） |

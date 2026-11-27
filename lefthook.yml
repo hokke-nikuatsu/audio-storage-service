@@ -21,6 +21,9 @@ pre-push:
     - name: gitleaks
       run: mise exec -- gitleaks git --redact --verbose --no-banner
       fail_text: "直し方: docs/conventions/checks.md の「既存のツールが失敗したとき」"
+    - name: gradle
+      run: ./gradlew check
+      fail_text: "直し方: docs/conventions/checks.md の「既存のツールが失敗したとき」"
     - name: shellcheck
       run: git ls-files -z '*.sh' | xargs -0 mise exec -- shellcheck
       fail_text: "直し方: docs/conventions/checks.md の「既存のツールが失敗したとき」"
