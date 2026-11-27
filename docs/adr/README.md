@@ -29,4 +29,5 @@
 | [0014](0014-name-each-saved-file-uniquely.md) | 録音のファイルは保存のたびに一意な名前で書き、DB を切り替えてから古いファイルを消す | accepted | 2026-11-27 |
 | [0015](0015-use-sqlite-embedded-in-service.md) | データベースはサービスに組み込む SQLite にする | accepted | 2026-11-27 |
 | [0016](0016-access-database-with-jooq.md) | データベースへのアクセスは、スキーマから生成した jOOQ のコードで行う | accepted | 2026-11-27 |
+| [0017](0017-migrate-schema-with-flyway.md) | スキーマは Flyway の SQL のマイグレーションで管理し、初期データは別の場所に置く | accepted | 2026-11-27 |
 <!-- adr-index:end -->
