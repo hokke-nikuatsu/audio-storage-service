@@ -5,6 +5,7 @@
 - **Language**: Kotlin 2.3 系
 - **Framework**: Spring Boot 4.1。リクエストは Spring MVC（ブロッキング）で処理し、WebFlux やコルーチンは使わない
 - **Runtime**: Java 25
+- **Database**: SQLite（ファイル）。サービスのプロセスに組み込み、外部キーの検査は接続ごとに有効にする
 
 ## Audio Formats
 
@@ -38,3 +39,4 @@
 - 音声フォーマット: [ADR-0012](../../docs/adr/0012-transfer-m4a-and-store-wav.md)
 - 音声の変換: [ADR-0013](../../docs/adr/0013-convert-audio-by-running-ffmpeg.md)
 - 録音のファイルの名前と置き換えの順番: [ADR-0014](../../docs/adr/0014-name-each-saved-file-uniquely.md)
+- データベース: [ADR-0015](../../docs/adr/0015-use-sqlite-embedded-in-service.md)
