@@ -10,6 +10,7 @@
 
 - **送受信用**: m4a（MP4 のコンテナに AAC）。POST で受け付け、GET の `{audio_format}` で指定できるのは `m4a` だけ
 - **保存用**: WAV（PCM 16 ビット）。サンプリングレートとチャンネル数は元の録音のまま保つ
+- **変換**: ffmpeg のコマンドを `ProcessBuilder` で起動し、一時ファイルで受け渡す。変換の前に ffprobe で、コンテナが MP4、コーデックが AAC であることを確かめる
 
 ## Development Standards
 
@@ -34,3 +35,4 @@
 - 静的解析: [ADR-0009](../../docs/adr/0009-check-kotlin-with-ktlint-and-detekt.md)
 - アーキテクチャとモジュールの分け方: `structure.md`
 - 音声フォーマット: [ADR-0012](../../docs/adr/0012-transfer-m4a-and-store-wav.md)
+- 音声の変換: [ADR-0013](../../docs/adr/0013-convert-audio-by-running-ffmpeg.md)

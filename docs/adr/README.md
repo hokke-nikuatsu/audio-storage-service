@@ -25,4 +25,5 @@
 | [0010](0010-separate-core-from-io-by-ports-and-adapters.md) | 業務の手順と外の世界をポートとアダプタで分ける | accepted | 2026-11-27 |
 | [0011](0011-enforce-layer-dependencies-with-gradle-modules.md) | 層の依存の向きは、層ごとの Gradle のモジュールで強制する | accepted | 2026-11-27 |
 | [0012](0012-transfer-m4a-and-store-wav.md) | 送受信は m4a（AAC）、保存は WAV（PCM 16 ビット）にする | accepted | 2026-11-27 |
+| [0013](0013-convert-audio-by-running-ffmpeg.md) | 音声の変換は ffmpeg のコマンドを直接起動して行い、形式は ffprobe で確かめる | accepted | 2026-11-27 |
 <!-- adr-index:end -->
