@@ -4,39 +4,39 @@
 EARS (Easy Approach to Requirements Syntax) is the standard format for acceptance criteria in spec-driven development.
 
 EARS patterns describe the logical structure of a requirement (condition + subject + response) and are not tied to any particular natural language.  
-All acceptance criteria should be written in the target language configured for the specification (for example, `spec.json.language` / `ja`).  
-Keep EARS trigger keywords and fixed phrases in English (`When`, `If`, `While`, `Where`, `The system shall`, `The [system] shall`) and localize only the variable parts (`[event]`, `[precondition]`, `[trigger]`, `[feature is included]`, `[response/action]`) into the target language. Do not interleave target-language text inside the trigger or fixed English phrases themselves.
+All acceptance criteria are written in Japanese, the language this project uses for spec bodies (see AGENTS.md). <!-- project-override (see docs/adr/0002) -->
+Express each EARS pattern with the fixed Japanese phrases below (`〜とき、`, `〜場合、`, `〜間、`, `〜構成では、`, `〜は常に`) instead of the English trigger keywords and `shall`. Do not mix English trigger keywords or `shall` into the sentence. End the response with a verb in the plain form (`〜する`). <!-- project-override (see docs/adr/0002) -->
 
 ## Primary EARS Patterns
 
 ### 1. Event-Driven Requirements
-- **Pattern**: When [event], the [system] shall [response/action]
+- **Pattern**: [event]とき、[system]は[response/action] <!-- project-override (see docs/adr/0002) -->
 - **Use Case**: Responses to specific events or triggers
-- **Example**: When user clicks checkout button, the Checkout Service shall validate cart contents
+- **Example**: ユーザーが購入ボタンを押したとき、Checkout Service はカートの中身を検証する
 
 ### 2. State-Driven Requirements
-- **Pattern**: While [precondition], the [system] shall [response/action]
+- **Pattern**: [precondition]間、[system]は[response/action] <!-- project-override (see docs/adr/0002) -->
 - **Use Case**: Behavior dependent on system state or preconditions
-- **Example**: While payment is processing, the Checkout Service shall display loading indicator
+- **Example**: 決済を処理している間、Checkout Service は処理中の表示を出す
 
 ### 3. Unwanted Behavior Requirements
-- **Pattern**: If [trigger], the [system] shall [response/action]
+- **Pattern**: [trigger]場合、[system]は[response/action] <!-- project-override (see docs/adr/0002) -->
 - **Use Case**: System response to errors, failures, or undesired situations
-- **Example**: If invalid credit card number is entered, then the website shall display error message
+- **Example**: 正しくないクレジットカード番号が入力された場合、Web サイトはエラーメッセージを表示する
 
 ### 4. Optional Feature Requirements
-- **Pattern**: Where [feature is included], the [system] shall [response/action]
+- **Pattern**: [feature is included]構成では、[system]は[response/action] <!-- project-override (see docs/adr/0002) -->
 - **Use Case**: Requirements for optional or conditional features
-- **Example**: Where the car has a sunroof, the car shall have a sunroof control panel
+- **Example**: サンルーフを備えた構成では、車はサンルーフの操作パネルを持つ
 
 ### 5. Ubiquitous Requirements
-- **Pattern**: The [system] shall [response/action]
+- **Pattern**: [system]は常に[response/action] <!-- project-override (see docs/adr/0002) -->
 - **Use Case**: Always-active requirements and fundamental system properties
-- **Example**: The mobile phone shall have a mass of less than 100 grams
+- **Example**: 携帯電話は常に100グラム未満の重さである
 
 ## Combined Patterns
-- While [precondition], when [event], the [system] shall [response/action]
-- When [event] and [additional condition], the [system] shall [response/action]
+- [precondition]間に[event]とき、[system]は[response/action] <!-- project-override (see docs/adr/0002) -->
+- [event]とき、[additional condition]であれば、[system]は[response/action] <!-- project-override (see docs/adr/0002) -->
 
 ## Subject Selection Guidelines
 - **Software Projects**: Use concrete system/service name (e.g., "Checkout Service", "User Auth Module")
@@ -45,5 +45,5 @@ Keep EARS trigger keywords and fixed phrases in English (`When`, `If`, `While`, 
 
 ## Quality Criteria
 - Requirements must be testable, verifiable, and describe a single behavior.
-- Use objective language: "shall" for mandatory behavior, "should" for recommendations; avoid ambiguous terms.
-- Follow EARS syntax: [condition], the [system] shall [response/action].
+- Use objective language: state mandatory behavior in the plain form (`〜する`) and recommendations as `〜することが望ましい`; avoid ambiguous terms. <!-- project-override (see docs/adr/0002) -->
+- Follow EARS syntax: [condition]、[system]は[response/action]. <!-- project-override (see docs/adr/0002) -->
