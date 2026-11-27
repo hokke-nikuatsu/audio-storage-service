@@ -61,5 +61,10 @@ AI は approve もマージもしない。
 | cc-sdd が生成したファイル（`.gitattributes` で `linguist-generated` のもの） | 生成物で、人が手を入れていない |
 | GitHub Actions のワークフローの書き方 | actionlint（`lefthook.yml` の `pre-push`） |
 | ADR と design.md の行数 | doc-line-count（`lefthook.yml` の `pre-push`） |
+| コミットの著者とコミッターのメールアドレス | commit-author（`lefthook.yml` の `pre-push`） |
+| コミットメッセージの1行目の書式と、その後の空行 | commit-message（`lefthook.yml` の `pre-push`） |
+| ブランチ名の書式と長さ | branch-name（`lefthook.yml` の `pre-push`） |
+| シークレットの混入 | gitleaks（`lefthook.yml` の `pre-push`） |
+| シェルスクリプトの書き方 | shellcheck（`lefthook.yml` の `pre-push`） |
 | ADR の一覧の表が各 ADR から作ったものと同じか、ADR どうしの amends と amended by の対応、`lefthook.yml` のジョブとこの表の対応 | doc-consistency（`lefthook.yml` の `pre-push`） |
 | ドキュメントの中のリンク切れとアンカー切れ | doc-links（`lefthook.yml` の `pre-push`） |

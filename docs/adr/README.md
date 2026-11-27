@@ -14,8 +14,9 @@
 | 番号 | タイトル | 状態 | 日付 |
 |---|---|---|---|
 | [0001](0001-spec-driven-ai-development-with-human-judgment.md) | cc-sdd による仕様駆動で、AI が実装・レビューし、人が判断する開発プロセスにする | amended by ADR-0004 | 2026-11-23 |
-| [0002](0002-tune-cc-sdd-for-human-readable-specs.md) | cc-sdd はテンプレートを主にチューニングし、design.md を人が読める長さと構成に保つ | amended by ADR-0004 | 2026-11-23 |
+| [0002](0002-tune-cc-sdd-for-human-readable-specs.md) | cc-sdd はテンプレートを主にチューニングし、design.md を人が読める長さと構成に保つ | amended by ADR-0004, ADR-0006 | 2026-11-23 |
 | [0003](0003-separate-entry-points-from-conventions.md) | 入口のファイルは案内だけにし、規約は作業の進め方とコードで置き場を分ける | accepted | 2026-11-23 |
 | [0004](0004-human-approves-requirements-design-and-tasks.md) | cc-sdd の spec は、要件・設計・タスクの3つを人が承認する | accepted | 2026-11-23 |
 | [0005](0005-run-same-checks-locally-and-in-ci.md) | チェックは手元のフックと CI で同じコマンドを走らせ、CI の結果を1つのジョブにまとめる | accepted | 2026-11-26 |
+| [0006](0006-override-cc-sdd-skills-only-where-they-conflict.md) | cc-sdd の SKILL.md は、リポジトリの規約と直接ぶつかる箇所に限り1行単位で書き換える | accepted | 2026-11-27 |
 <!-- adr-index:end -->

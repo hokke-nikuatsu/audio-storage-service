@@ -4,9 +4,22 @@ pre-push:
   jobs:
     - name: actionlint
       run: mise exec -- actionlint
+      fail_text: "直し方: docs/conventions/checks.md の「既存のツールが失敗したとき」"
+    - name: branch-name
+      run: scripts/checks/branch_name.sh
+    - name: commit-author
+      run: scripts/checks/commit_author.sh
+    - name: commit-message
+      run: scripts/checks/commit_message.sh
     - name: doc-consistency
       run: mise exec -- python3 scripts/checks/doc_consistency.py
     - name: doc-line-count
       run: mise exec -- python3 scripts/checks/doc_line_count.py
     - name: doc-links
       run: git ls-files -z '*.md' | xargs -0 mise exec -- lychee --offline --include-fragments --no-progress
+    - name: gitleaks
+      run: mise exec -- gitleaks git --redact --verbose --no-banner
+      fail_text: "直し方: docs/conventions/checks.md の「既存のツールが失敗したとき」"
+    - name: shellcheck
+      run: git ls-files -z '*.sh' | xargs -0 mise exec -- shellcheck
+      fail_text: "直し方: docs/conventions/checks.md の「既存のツールが失敗したとき」"
