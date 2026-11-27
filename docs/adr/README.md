@@ -32,4 +32,5 @@
 | [0017](0017-migrate-schema-with-flyway.md) | スキーマは Flyway の SQL のマイグレーションで管理し、初期データは別の場所に置く | accepted | 2026-11-27 |
 | [0018](0018-build-and-run-in-single-container.md) | Dockerfile の中でビルドし、Ubuntu ベースの1つのコンテナで動かす | accepted | 2026-11-27 |
 | [0019](0019-test-each-layer-for-its-own-concern.md) | テストは層ごとに確かめることを分け、業務の分岐はフェイクで、外の世界は本物で確かめる | accepted | 2026-11-27 |
+| [0020](0020-write-tests-with-kotest.md) | テストは Kotest で書く | accepted | 2026-11-27 |
 <!-- adr-index:end -->

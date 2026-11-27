@@ -32,6 +32,7 @@
 
 ### Testing
 
+- テストは Kotest で書き、`context` で要件を、`test` で受け入れ条件を表して、名前に要件 ID（`REQ-1.3` など）を書く。Spring Boot を起動するテストは `kotest-extensions-spring` を通す
 - application はポートに手で書いたフェイクを渡す単体テストで、業務の分岐を網羅する。モックのライブラリは使わない
 - adapter は本物（一時的な SQLite のファイルに Flyway を流したもの、ffmpeg、一時ディレクトリ）で結合テストをする
 - Spring Boot を丸ごと起動して HTTP を送るテストは少しだけ書く
@@ -61,3 +62,4 @@
 - マイグレーションと初期データ: [ADR-0017](../../docs/adr/0017-migrate-schema-with-flyway.md)
 - 実行環境: [ADR-0018](../../docs/adr/0018-build-and-run-in-single-container.md)
 - テスト戦略: [ADR-0019](../../docs/adr/0019-test-each-layer-for-its-own-concern.md)
+- テストの道具: [ADR-0020](../../docs/adr/0020-write-tests-with-kotest.md)
