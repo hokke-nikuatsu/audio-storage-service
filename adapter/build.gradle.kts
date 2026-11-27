@@ -5,7 +5,7 @@ plugins {
 }
 
 // Flyway のプラグインがマイグレーションを流すときのクラスパス。コード生成のための SQLite を作るときにだけ使う
-val flywayMigration by configurations.creating
+val flywayMigration = configurations.create("flywayMigration")
 
 dependencies {
     implementation(project(":application"))
