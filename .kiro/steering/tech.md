@@ -6,6 +6,7 @@
 - **Framework**: Spring Boot 4.1。リクエストは Spring MVC（ブロッキング）で処理し、WebFlux やコルーチンは使わない
 - **Runtime**: Java 25
 - **Database**: SQLite（ファイル）。サービスのプロセスに組み込み、外部キーの検査は接続ごとに有効にする
+- **Database Access**: jOOQ。マイグレーションを流した一時的な SQLite のファイルからコードを生成し、生成したコードと jOOQ への依存は `adapter` にだけ置く
 
 ## Audio Formats
 
@@ -40,3 +41,4 @@
 - 音声の変換: [ADR-0013](../../docs/adr/0013-convert-audio-by-running-ffmpeg.md)
 - 録音のファイルの名前と置き換えの順番: [ADR-0014](../../docs/adr/0014-name-each-saved-file-uniquely.md)
 - データベース: [ADR-0015](../../docs/adr/0015-use-sqlite-embedded-in-service.md)
+- データベースへのアクセス: [ADR-0016](../../docs/adr/0016-access-database-with-jooq.md)
