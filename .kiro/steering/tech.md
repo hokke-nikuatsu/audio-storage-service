@@ -32,7 +32,7 @@
 
 ### Testing
 
-- テストは Kotest で書き、`context` で要件を、`test` で受け入れ条件を表して、名前に要件 ID（`REQ-1.3` など）を書く。Spring Boot を起動するテストは `kotest-extensions-spring` を通す
+- テストは Kotest で書き、`context` で要件を、`test` で受け入れ条件を表して、名前に要件 ID（`REQ-1.3` など）を書く（ビルドの規則や道具の動作を確かめるような、受け入れ条件にひもづかないテストには書かない）。Spring Boot を起動するテストは `kotest-extensions-spring` を通す
 - application はポートに手で書いたフェイクを渡す単体テストで、業務の分岐を網羅する。モックのライブラリは使わない
 - adapter は本物（一時的な SQLite のファイルに Flyway を流したもの、ffmpeg、一時ディレクトリ）で結合テストをする
 - Spring Boot を丸ごと起動して HTTP を送るテストは少しだけ書く
