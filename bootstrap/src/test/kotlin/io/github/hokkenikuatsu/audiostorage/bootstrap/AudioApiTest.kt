@@ -17,7 +17,7 @@ import java.nio.file.Path
 import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.readBytes
 
-// テスト用の音声の置き場所。Gradle はモジュールのディレクトリでテストを走らせる
+// テスト用の音声の置き場所。テストは bootstrap/ をカレントディレクトリにして走るので、1つ上からたどる
 private val AUDIO_DIR: Path = Path.of("..", "testdata", "audio")
 
 // 受け付ける m4a（MP4 のコンテナに AAC の音声を入れたもの）
@@ -36,7 +36,7 @@ private class Response(
             ?.asString()
 }
 
-// Spring Boot を起動し、課題の curl と同じ要求を HTTP で送る
+// Spring Boot を起動し、保存と取得の要求を HTTP で送って確かめる
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AudioApiTest(
     private val environment: Environment,
@@ -127,7 +127,7 @@ class AudioApiTest(
 
                 response.status shouldBe 200
                 response.contentType shouldBe MediaType("audio", "mp4")
-                // MP4 のファイルは、先頭の箱の種類が ftyp になる
+                // MP4 のファイルは、5〜8バイト目が ftyp になる
                 response.body.copyOfRange(4, 8).decodeToString() shouldBe "ftyp"
             }
         }
