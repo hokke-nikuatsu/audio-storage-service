@@ -10,7 +10,7 @@ import io.github.hokkenikuatsu.audiostorage.domain.RecordingPath
 import io.github.hokkenikuatsu.audiostorage.domain.UserId
 import org.jooq.DSLContext
 
-// 有効な ID と、組ごとの録音のパスを SQLite に読み書きする
+// SQLite で、有効な ID の有無を確かめ、組ごとの録音のパスを読み書きする
 class JooqRecordingRepository(
     private val dsl: DSLContext,
 ) : RecordingRepository {
