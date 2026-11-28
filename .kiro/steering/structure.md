@@ -15,7 +15,7 @@
 
 ### application
 **Location**: `/application/`  
-**Purpose**: 保存と取得の手順（ユースケース）と、手順が外の世界に求めるポート。依存してよいのは `domain` と、Spring の `spring-context`（`@Service`）と `spring-tx`（`@Transactional`）だけ  
+**Purpose**: 保存と取得の手順（ユースケース）と、手順が外の世界に求めるポート。依存してよいのは `domain` と、Spring の `spring-context`（`@Service`）だけ  
 **Example**: 保存のユースケース、`AudioConverter` のようなポート
 
 ### adapter
