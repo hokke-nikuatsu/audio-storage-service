@@ -1,0 +1,28 @@
+# syntax=docker/dockerfile:1
+
+# ビルドの段。この JDK 25 を Gradle の toolchain がそのまま使うので、JDK を取りにいかない
+FROM eclipse-temurin:25-jdk AS build
+WORKDIR /workspace
+COPY . .
+# jar を作るタスクだけを流す（jOOQ のコード生成を含む）。テストは ffmpeg がないと失敗させる決まりなので、ここでは流さない。
+# Gradle 本体と依存はキャッシュに置き、2回目からのビルドで取り直さない
+RUN --mount=type=cache,target=/root/.gradle \
+    ./gradlew --no-daemon :bootstrap:bootJar \
+    && cp bootstrap/build/libs/bootstrap.jar /app.jar
+
+# 実行の段
+FROM eclipse-temurin:25-jre
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+# アップロードされたファイルを ffmpeg に読ませるので、乗っ取られたときの被害を小さくするため root で動かさない。
+# ボリュームは作るときにこのディレクトリの持ち主を引き継ぐので、VOLUME より前に持ち主を変える
+RUN useradd --system --no-create-home app \
+    && mkdir /data \
+    && chown app:app /data
+VOLUME /data
+COPY --from=build /app.jar /app/app.jar
+USER app
+EXPOSE 8080
+# sqlite-jdbc がネイティブのライブラリを読むときの、Java の警告を出さない
+ENTRYPOINT ["java", "--enable-native-access=ALL-UNNAMED", "-jar", "/app/app.jar"]
