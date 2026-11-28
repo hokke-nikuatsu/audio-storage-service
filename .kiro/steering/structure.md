@@ -44,4 +44,4 @@
 - ほかのモジュールへの依存は `implementation` で宣言し、`api` は `application` から `domain` への依存だけに使う
 - モジュールの外から使わないクラスは `internal` にする
 
-判断の理由: [ADR-0010](../../docs/adr/0010-separate-core-from-io-by-ports-and-adapters.md)、[ADR-0011](../../docs/adr/0011-enforce-layer-dependencies-with-gradle-modules.md)
+判断の理由: [ADR-0010](../../docs/adr/0010-separate-core-from-io-by-ports-and-adapters.md)、[ADR-0011](../../docs/adr/0011-enforce-layer-dependencies-with-gradle-modules.md)、[ADR-0022](../../docs/adr/0022-keep-transactions-inside-db-adapter.md)
