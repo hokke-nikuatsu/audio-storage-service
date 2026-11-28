@@ -54,6 +54,20 @@ class JooqRecordingRepositoryTest :
                     repository.phraseExists(PhraseId(id)) shouldBe false
                 }
             }
+
+            test("REQ-4.2 登録されていない ID を含む組には、パスを記録できない") {
+                val database = newDatabase()
+                val repository = JooqRecordingRepository(database)
+                // ユーザー ID とフレーズ ID のそれぞれの外部キーで失敗する
+                val unknownKeys = listOf(RecordingKey(UserId(4), PhraseId(1)), RecordingKey(UserId(1), PhraseId(4)))
+                unknownKeys.forEach { unknownKey ->
+                    shouldThrow<DataAccessException> {
+                        repository.replacePath(unknownKey, RecordingPath("unknown.wav"))
+                    }
+                }
+
+                database.fetchCount(RECORDINGS) shouldBe 0
+            }
         }
 
         context("REQ-5.4 組と保存したファイルのパスを記録する") {
