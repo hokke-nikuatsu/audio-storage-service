@@ -1,11 +1,10 @@
-# ボリュームの名前を、clone した先のディレクトリの名前によらず audio-storage_data にする
 name: audio-storage
 
 services:
   audio-storage:
     build: .
     ports:
-      # ポートを指定しない http://localhost/ で受け付ける。認証なしでファイルを受け取るので、このマシンの中からの接続だけを受け付ける
+      # http://localhost/ で受け付ける。認証がないので、このマシンの外からの接続は受け付けない
       - "127.0.0.1:80:8080"
     volumes:
       # DB のファイルと録音のファイルを、コンテナを作り直しても残す

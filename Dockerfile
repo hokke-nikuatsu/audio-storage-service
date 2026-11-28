@@ -1,10 +1,10 @@
 # syntax=docker/dockerfile:1
 
-# ビルドの段。この JDK 25 を Gradle の toolchain がそのまま使うので、JDK を取りにいかない
+# ビルドの段
 FROM eclipse-temurin:25-jdk AS build
 WORKDIR /workspace
 COPY . .
-# jar を作るタスクだけを流す（jOOQ のコード生成を含む）。テストは ffmpeg がないと失敗させる決まりなので、ここでは流さない。
+# このイメージには ffmpeg がなく、変換のテストが失敗するので、テストは流さずに jar だけを作る
 # Gradle 本体と依存はキャッシュに置き、2回目からのビルドで取り直さない
 RUN --mount=type=cache,target=/root/.gradle \
     ./gradlew --no-daemon :bootstrap:bootJar \
@@ -16,7 +16,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 # アップロードされたファイルを ffmpeg に読ませるので、乗っ取られたときの被害を小さくするため root で動かさない。
-# ボリュームは作るときにこのディレクトリの持ち主を引き継ぐので、VOLUME より前に持ち主を変える
+# app ユーザーが /data に書けるようにする。ボリュームは作られるときにこのディレクトリの持ち主を引き継ぐので、VOLUME より前に変える
 RUN useradd --system --no-create-home app \
     && mkdir /data \
     && chown app:app /data
