@@ -87,7 +87,7 @@
   - _Requirements: 1.1, 1.5, 1.6, 2.1_
 
 - [ ] 8. HTTP の入口と起動の組み立て
-- [ ] 8.1 HTTP の入口とエラーの応答を作る
+- [x] 8.1 HTTP の入口とエラーの応答を作る
   - 保存と取得の2つのエンドポイントで、`audio_file` のフィールドを受け取り、ユースケースの結果を 201・204・200 とエラーのステータスにする
   - 空のファイルは、パートがないときと同じ例外にしてエラーの応答に任せる
   - エラーの種類と Spring の例外（パートがない、multipart ではない、大きすぎる）、想定外の例外を、`code` を持つエラーの JSON にする場所を1つにする
@@ -120,3 +120,4 @@
 - `RecordingKeyResolver` は `internal` にして Bean にしない。public のユースケースは、受け取った `RecordingRepository` から自分の中で作る（public のコンストラクタの引数に `internal` の型は置けない）
 - `java.nio.file.Path` は `Iterable<Path>` なので、`MutableList<Path>` に `+= path` と書くと1要素の追加にならず、コンパイルが失敗する。`add` を使う
 - detekt の `ReturnCount` は既定で return を2つまでにする（ガード節も数える）。確かめる段階が多い手順は、`?: return` を並べず、`?.let` でつないだ値を1つの `when` で読み分ける
+- `ErrorHandler` は、Spring がステータスを決めている例外（`ErrorResponse` を実装したもの。存在しないパスの 404、未対応のメソッドの 405 など）を、`code` を付けずに Spring の本文のまま返す。最後の受け皿で 500 にしないため。エラーの分岐の図にはこの分岐も載せる
