@@ -24,5 +24,5 @@ VOLUME /data
 COPY --from=build /app.jar /app/app.jar
 USER app
 EXPOSE 8080
-# sqlite-jdbc がネイティブのライブラリを読むときの、Java の警告を出さない
+# sqlite-jdbc が、同梱する SQLite の本体（C のライブラリ）を読み込むことを許す。許さないと、起動のたびに Java が警告を出す
 ENTRYPOINT ["java", "--enable-native-access=ALL-UNNAMED", "-jar", "/app/app.jar"]
