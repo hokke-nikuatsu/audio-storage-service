@@ -1,0 +1,30 @@
+audio-storage:
+  # DB のファイルと録音のファイルを置くディレクトリ。コンテナの中ではボリュームの /data
+  data-dir: /data
+  storage-root: ${audio-storage.data-dir}/recordings
+  ffmpeg: ffmpeg
+  ffprobe: ffprobe
+  conversion-timeout: 30s
+  # ビットレートを低くして長い音声を詰めた m4a で、ディスクを埋められないようにする
+  max-storage-size: 200MB
+
+spring:
+  datasource:
+    url: jdbc:sqlite:${audio-storage.data-dir}/audio-storage.db?foreign_keys=true
+    hikari:
+      # 接続を1本にして、同じ組への保存が重なっても、置き換える前のパスを取り違えないようにする
+      maximum-pool-size: 1
+  jooq:
+    sql-dialect: SQLITE
+  flyway:
+    locations: classpath:db/migration,classpath:db/seed
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      # 本文には、ファイルのほかに multipart の区切りとヘッダーが入るので、ファイルの上限より少し大きくする
+      max-request-size: 11MB
+
+server:
+  tomcat:
+    # 上限を超えた本文を読み捨てずに接続を切ると 413 が届かないので、読み捨てる上限を広げる
+    max-swallow-size: 100MB

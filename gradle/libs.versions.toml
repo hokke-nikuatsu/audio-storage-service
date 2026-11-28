@@ -14,13 +14,13 @@ flyway = "12.4.0"
 
 [libraries]
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
-spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
 spring-boot-starter-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc" }
 spring-boot-starter-jooq = { module = "org.springframework.boot:spring-boot-starter-jooq" }
 spring-boot-starter-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway" }
 spring-boot-test = { module = "org.springframework.boot:spring-boot-test" }
 spring-context = { module = "org.springframework:spring-context" }
 spring-webmvc = { module = "org.springframework:spring-webmvc" }
+jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 jooq = { module = "org.jooq:jooq" }
 slf4j-api = { module = "org.slf4j:slf4j-api" }

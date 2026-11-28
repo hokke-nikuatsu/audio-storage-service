@@ -86,14 +86,14 @@
   - 完了の状態: 結合テストで、受け付ける m4a がサンプリングレートとチャンネル数を保った WAV になり、戻した m4a を ffprobe が AAC と読み、受け付けないファイルをすべて拒み、上限を小さく設定すると上限超過になることが確かめられる
   - _Requirements: 1.1, 1.5, 1.6, 2.1_
 
-- [ ] 8. HTTP の入口と起動の組み立て
-- [ ] 8.1 HTTP の入口とエラーの応答を作る
+- [x] 8. HTTP の入口と起動の組み立て
+- [x] 8.1 HTTP の入口とエラーの応答を作る
   - 保存と取得の2つのエンドポイントで、`audio_file` のフィールドを受け取り、ユースケースの結果を 201・204・200 とエラーのステータスにする
   - 空のファイルは、パートがないときと同じ例外にしてエラーの応答に任せる
   - エラーの種類と Spring の例外（パートがない、multipart ではない、大きすぎる）、想定外の例外を、`code` を持つエラーの JSON にする場所を1つにする
   - 完了の状態: `web` がビルドでき、エラーの表のすべての行に、対応するステータスと `code` の変換がある
   - _Requirements: 1.2, 1.4, 1.5, 1.6, 1.7, 2.2, 2.3, 2.4, 3.2, 3.3, 5.2_
-- [ ] 8.2 起動と組み立て、設定を作る
+- [x] 8.2 起動と組み立て、設定を作る
   - Spring Boot の起動、設定値の読み込み、3つのアダプタを設定値と jOOQ を渡して作る組み立てを書く
   - `bootstrap` に、DB を使う starter（jOOQ、Flyway）と sqlite-jdbc を入れる
   - 設定に、外部キーを有効にした SQLite の接続（接続は1本）、マイグレーションと初期データの場所、ファイルの上限 10MB と Tomcat の読み捨ての上限、保存先のルート、ffmpeg と ffprobe のパス、タイムアウト、WAV の上限を書く
@@ -120,3 +120,6 @@
 - `RecordingKeyResolver` は `internal` にして Bean にしない。public のユースケースは、受け取った `RecordingRepository` から自分の中で作る（public のコンストラクタの引数に `internal` の型は置けない）
 - `java.nio.file.Path` は `Iterable<Path>` なので、`MutableList<Path>` に `+= path` と書くと1要素の追加にならず、コンパイルが失敗する。`add` を使う
 - detekt の `ReturnCount` は既定で return を2つまでにする（ガード節も数える）。確かめる段階が多い手順は、`?: return` を並べず、`?.let` でつないだ値を1つの `when` で読み分ける
+- `ErrorHandler` は、Spring がステータスを決めている例外（`ErrorResponse` を実装したもの。存在しないパスの 404、未対応のメソッドの 405 など）を、`code` を付けずに Spring の本文のまま返す。最後の受け皿で 500 にしないため。エラーの分岐の図にはこの分岐も載せる
+- DB のファイルと録音の保存先は、どちらも `audio-storage.data-dir`（既定は `/data`）から決まる。Spring Boot を起動するテストは、`@DynamicPropertySource` でこれを一時ディレクトリに向ける
+- sqlite-jdbc はネイティブのライブラリを読むので、Java 25 は起動のたびに native access の警告を出す。動作には影響しない。消すなら `java` に `--enable-native-access=ALL-UNNAMED` を付ける
