@@ -112,7 +112,6 @@
   - ホストの 80 番をコンテナの 8080 番に割り当てる1サービスの compose の設定を書く
   - README に、起動方法、`curl` の例、手を抜いた箇所と本番運用ならどうするかを書く
   - 完了の状態: `docker compose up --build` で起動し、課題の `curl` の手順で、初期データの ID で保存と取得ができる（手で確かめる）
-  - _Depends: 9_
   - _Requirements: 4.1, 4.2, 5.1_
 
 ## Implementation Notes
