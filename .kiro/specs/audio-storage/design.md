@@ -26,7 +26,7 @@
 
 ### Allowed Dependencies
 
-- 実行時: SQLite のファイル、ローカルのディスク（`/data`）、ffmpeg と ffprobe のコマンド。ネットワークの先のサービスには依存しない。モジュールの間は structure.md の依存の表のとおり。外部のライブラリは、`domain` はなし、`application` は `spring-context`、`adapter` は jOOQ と SLF4J、`web` は Spring MVC、`bootstrap` は Spring Boot（jOOQ と Flyway の starter を含む）と sqlite-jdbc に限る
+- 実行時: SQLite のファイル、ローカルのディスク（`/data`）、ffmpeg と ffprobe のコマンド。ネットワークの先のサービスには依存しない。モジュールの間は structure.md の依存の表のとおり。外部のライブラリは、`domain` はなし、`application` は `spring-context`、`adapter` は jOOQ と SLF4J、`web` は Spring MVC（コンパイルとテストだけ Servlet の API）、`bootstrap` は Spring Boot（jOOQ と Flyway の starter を含む）と sqlite-jdbc に限る
 
 ### Revalidation Triggers
 
