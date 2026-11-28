@@ -349,6 +349,6 @@ scripts/testdata/generate-audio.sh     # 受け付けないファイルを ffmpe
 Dockerfile
 compose.yaml
 .dockerignore
-README.md                              # 起動方法と curl の例、手を抜いた箇所と本番運用ならどうするか
+README.md                              # 起動方法と curl の例
 docs/architecture.md                   # ER 図、シーケンス図、エラーの分岐。実装と同じ PR で更新する
 ```

@@ -1,0 +1,16 @@
+# イメージのビルドに要るのは、Gradle のビルドの設定と各モジュールのソースだけ
+.git/
+.github/
+.claude/
+.kiro/
+.review/
+docs/
+requirements/
+scripts/
+testdata/
+*.md
+
+# 手元のビルドの生成物。コンテナの中で作り直す
+.gradle/
+.kotlin/
+**/build/
