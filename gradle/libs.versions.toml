@@ -14,7 +14,6 @@ flyway = "12.4.0"
 
 [libraries]
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
-spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
 spring-boot-starter-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc" }
 spring-boot-starter-jooq = { module = "org.springframework.boot:spring-boot-starter-jooq" }
 spring-boot-starter-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway" }
