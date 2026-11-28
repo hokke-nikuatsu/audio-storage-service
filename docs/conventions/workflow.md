@@ -9,8 +9,8 @@
 | 種類 | 置き場 | 書くこと | 読むタイミング |
 |---|---|---|---|
 | 作業の進め方の規約 | [docs/conventions/](.) | ドキュメントの置き場、開発の流れ、要件 ID、ブランチ、コミット、PR、レビュー、チェック | すべての作業の前 |
-| コードに関する規約 | `.kiro/steering/` | 技術スタック、アーキテクチャ、コーディング規約 | コードを読み書きする作業の前 |
-| 仕様 | `.kiro/specs/<feature>/` | 要件（requirements.md）、設計（design.md）、タスク（tasks.md） | その機能の spec や実装の作業の前 |
+| コードに関する規約 | [.kiro/steering/](../../.kiro/steering/) | 技術スタック、アーキテクチャ、コーディング規約 | コードを読み書きする作業の前 |
+| 仕様 | [.kiro/specs/](../../.kiro/specs/)`<feature>/` | 要件（requirements.md）、設計（design.md）、タスク（tasks.md） | その機能の spec や実装の作業の前 |
 | アーキテクチャの現状 | [docs/architecture.md](../architecture.md) | 今動いているシステムの ER 図、エンドポイントごとのシーケンス図、検証とエラーの分岐のフロー図 | コードを読み書きする作業の前 |
 | 判断の理由 | [docs/adr/](../adr/README.md) | 1つの判断につき1ファイル | 判断の理由を確かめるとき |
 | AI の入口 | [AGENTS.md](../../AGENTS.md)、[CLAUDE.md](../../CLAUDE.md) | 言語、この規約の取り込み、Claude Code 固有の設定 | — |
